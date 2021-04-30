@@ -1,0 +1,86 @@
+@font-face {
+	font-family: SerifaStd;
+	src: url(../../assets/Serifa/SerifaStd-Roman.otf);
+}
+@font-face {
+	font-family: Futura;
+	src: url(../../assets/Futura/FuturaPTMedium.otf);
+}
+body {
+	background-color: #eae6da;
+}
+
+
+.header-box {
+	width: 70%;
+	margin: 0 15%;
+	height: 10rem;
+	position: relative;
+	font-family: SerifaStd;
+}
+.header-logo-img, .header-cart-img {
+	width: 5rem;
+	position: absolute;
+	display: inline-block;
+	left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.header-cart-img {
+	left: auto;
+	right: 0;
+}
+.header-menu-items-wrapper {
+	display: inline-block;
+    position: absolute;
+    right: 8rem;
+    top: 50%;
+    transform: translateY(-50%);
+	font-size: 1.1em;
+}
+.header-menu-item {
+	padding: 0 5px;
+	color: black;
+	cursor: pointer;
+	text-decoration: none;
+}
+.header-menu-item.active {
+	font-weight: bold;
+}
+
+.footer-box {
+	width: 70%;
+	margin: 0 15% 100px 15%;
+	height: 10rem;
+	position: absolute;
+	bottom: 0;
+}
+.footer-break-line {
+	border: 1px solid black;
+	margin: 20px 0;
+}
+.footer-logo-img-wrapper {
+	width: 5rem;
+	display: inline-block;
+	position: relative;
+}
+.footer-logo-img {
+	width: 100%;
+}
+.footer-upper-subbox > *{
+	vertical-align: top;
+}
+.footer-upper-subbox{
+	height: 119px;
+	position: relative;
+}
+
+
+.footer-pague-com {
+	display: inline-block;
+	position: relative;
+	height: 100%;
+	margin: 0 0 0 20px;
+	font-weight: bold;
+	font-size: .9em;
+}
