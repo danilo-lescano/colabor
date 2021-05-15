@@ -1,6 +1,7 @@
 import {Route, Switch} from 'react-router-dom';
 import Layout from '../layout/Layout';
 import Loja from '../loja/Loja';
+import Mesa from '../loja/Mesa';
 import Blog from '../blog/Blog';
 import Contato from '../contato/Contato';
 import Login from '../login/Login';
@@ -26,6 +27,8 @@ const Routes = () => (
 			render={(props)=><Layout><Contato/></Layout>}/>
 		<Route exact path={'/login'}
 			render={(props)=><Layout><Login/></Layout>}/>
+		<Route exact path={'/item-1'}
+			render={(props)=><Layout><Mesa/></Layout>}/>
 	</Switch>
 );
 

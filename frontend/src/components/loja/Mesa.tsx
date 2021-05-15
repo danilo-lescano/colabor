@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom"
-import placeholder1 from '../../assets/placeholder1.png';
+import placeholder3 from '../../assets/placeholder3.png';
+import placeholder4 from '../../assets/placeholder4.png';
 
 interface ICarrouselImage {
     src: string;
@@ -10,27 +11,11 @@ interface ICarrouselImage {
 const getCarrouselImages = () => {
     return [
         {
-            src: 'https://wallpaperaccess.com/full/124573.jpg',
+            src: 'https://a-static.mlcdn.com.br/618x463/mesa-industrial-bernardo-madeira-macica-c-ferragem-preta-180m-maharaecodesign/enebuy/535333/bc9f390b8fc37dde0f02dbf5041b599f.jpg',
             link: '/'
         },
         {
-            src: 'https://hdwallpaperim.com/wp-content/uploads/2017/08/22/435641-ultra-wide-space.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://wallpaperaccess.com/full/124573.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://hdwallpaperim.com/wp-content/uploads/2017/08/22/435641-ultra-wide-space.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://wallpaperaccess.com/full/124573.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://hdwallpaperim.com/wp-content/uploads/2017/08/22/435641-ultra-wide-space.jpg',
+            src: 'https://a-static.mlcdn.com.br/618x463/mesa-industrial-lanna-madeira-macica-c-ferragem-preta-220m-maharaecodesign/enebuy/535318/883b58a5ac3259222a21ab4431af12cd.jpg',
             link: '/'
         },]
 }
@@ -85,13 +70,23 @@ const Carrousel = () => {
 }
 
 
-const Loja = () => {
+const Mesa = () => {
     return (
         <>
             <Carrousel/>
-            <img src={placeholder1} style={{margin: '100px 15%'}}/>
+            <img src={placeholder3} style={{margin: '100px 15%'}}/>
+            <br/>
+            <p style={{margin: '100px 15%', maxWidth: '500px'}}>Lorem ipsum dolor sit amet, consectetuer adipiscing
+elit, sed diam nonummy nibh euismod tincidunt ut
+laoreet dolore magna aliquam erat volutpat. Ut wisi
+enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
+consequat. Duis autem vel eum iriure dolor in hendrerit
+in vulputate velit esse molestie consequat, vel illum
+dolore eu feugiat nulla facilisis at vero eros et accumsan
+et iusto odio dignissim qui blandit praesent luptatum</p>
+            <img src={placeholder4} style={{margin: '100px 15%', float: 'right'}}/>
         </>
     )
 }
 
-export default Loja;
+export default Mesa;

@@ -4,6 +4,10 @@ import logo from '../../assets/logo.svg';
 import footerLogo from '../../assets/footer-logo.svg';
 import cart from '../../assets/cart.svg';
 import {Link, useLocation} from 'react-router-dom';
+import pag1 from '../../assets/pag1.png';
+import pag2 from '../../assets/pag2.png';
+import pag3 from '../../assets/pag3.png';
+import pag4 from '../../assets/pag4.png';
 
 
 interface ILayoutProps {
@@ -43,15 +47,15 @@ const Footer = function () {
                 <div className={'footer-pague-com'}>
                     Pague com:
                     <br/>
-                    <img className={'footer-pague-com-img'} src={logo}/>
-                    <img className={'footer-pague-com-img'} src={logo}/>
-                    <img className={'footer-pague-com-img'} src={logo}/>
-                    <img className={'footer-pague-com-img'} src={logo}/>
+                    <img className={'footer-pague-com-img'} src={pag1}/>
+                    <img className={'footer-pague-com-img'} src={pag2}/>
+                    <img className={'footer-pague-com-img'} src={pag3}/>
+                    <img className={'footer-pague-com-img'} src={pag4}/>
                 </div>
                 <div className={'footer-login'}>
                     Faça seu Login:<br/>
-                    <input type={'email'}/><br/>
-                    <input type={'password'}/><br/><br/>
+                    <input className={'footer-input'} placeholder={'Email'} type={'email'}/><br/>
+                    <input className={'footer-input'} placeholder={'Senha'} type={'password'}/><br/><br/>
                     <span style={{float:'right'}}>OK</span>
                     <span style={{fontSize:'0.7em', fontWeight:'normal'}}>
                         Ainda não tenho cadastro<br/>
@@ -60,7 +64,7 @@ const Footer = function () {
                 </div>
                 <div className={'footer-links'}>
                     <Link to='/' className={`/${path.split('/')[1]}` === '/' ? selectedClass : notSelectedClass} style={{marginRight:'100px'}}>Loja</Link>
-                    <Link to='/sobre' className={`/${path.split('/sobre')[1]}` === '/' ? selectedClass : notSelectedClass}>Sobre</Link><br/>
+                    <Link to='/sobre' className={`/${path.split('/sobre')[1]}` === '/' ? selectedClass : notSelectedClass}>Sobre</Link><br/><br/>
                     <Link to='/blog' className={`/${path.split('/')[1]}` === '/blog' ? selectedClass : notSelectedClass} style={{marginRight:'100px'}}>Blog</Link>
                     <Link to='/contato' className={`/${path.split('/')[1]}` === '/contato' ? selectedClass : notSelectedClass}>Contato</Link>
                 </div>
