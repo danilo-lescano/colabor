@@ -51,6 +51,16 @@ body {
 .header-menu-item.active {
 	font-weight: bold;
 }
+.header-logout-btn {
+	padding: 0 10px;
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1.4em;
+    background-color: rgba(0,0,0,0);
+    border: none;
+	font-family: SerifaStd;
+}
 
 
 

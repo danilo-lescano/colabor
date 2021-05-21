@@ -6,8 +6,6 @@ import Blog from '../blog/Blog';
 import Contato from '../contato/Contato';
 import Login from '../login/Login';
 
-
-
 // USER ROLES
 const ROOT = 'Root';
 const ADMIN = 'Admin';
@@ -17,19 +15,22 @@ export const routes = {
 	home: {uri: '/', label: 'Loja', roles: [ROOT, ADMIN, CLIENT]},
 };
 
-const Routes = () => (
-	<Switch>
-		<Route exact path={'/'}
-			render={(props)=><Layout><Loja/></Layout>}/>
-		<Route exact path={'/blog'}
-			render={(props)=><Layout><Blog/></Layout>}/>
-		<Route exact path={'/contato'}
-			render={(props)=><Layout><Contato/></Layout>}/>
-		<Route exact path={'/login'}
-			render={(props)=><Layout><Login/></Layout>}/>
-		<Route exact path={'/item-1'}
-			render={(props)=><Layout><Mesa/></Layout>}/>
-	</Switch>
-);
+const Routes = () => {
+
+	return (
+		<Switch>
+			<Route exact path={'/'}
+				render={(props)=><Layout><Loja/></Layout>}/>
+			<Route exact path={'/blog'}
+				render={(props)=><Layout><Blog/></Layout>}/>
+			<Route exact path={'/contato'}
+				render={(props)=><Layout><Contato/></Layout>}/>
+			<Route exact path={'/login'}
+				render={(props)=><Layout><Login/></Layout>}/>
+			<Route exact path={'/item-1'}
+				render={(props)=><Layout><Mesa/></Layout>}/>
+		</Switch>
+	);
+};
 
 export default Routes;

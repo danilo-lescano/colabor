@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import '../shared/css.css';
 import logo from '../../assets/logo.svg';
 import footerLogo from '../../assets/footer-logo.svg';
@@ -14,11 +14,25 @@ interface ILayoutProps {
 	children?: JSX.Element | Array<JSX.Element>;
 }
 
+const Logout = function () {
+    const onClick = function () {
+        localStorage.removeItem('session');
+        window.location.reload();
+    }
+    return <button className={'header-logout-btn'} onClick={onClick}>Logout</button>
+}
+
+function tryParse(str: string | null) {
+    if(!str)
+        return null;
+    return JSON.parse(str);
+}
+
 const Header = function () {
+	const [session, setSession] = useState<any>(tryParse(localStorage.getItem('session')));
     const {pathname: path} = useLocation();
     const selectedClass = 'active header-menu-item';
     const notSelectedClass = 'header-menu-item';
-
     return (
         <div className={'header-box'}>
             <img className={'header-logo-img'} src={logo} alt={'Cofab logo'}/>
@@ -27,7 +41,10 @@ const Header = function () {
                 <Link to='/blog' className={`/${path.split('/')[1]}` === '/blog' ? selectedClass : notSelectedClass}>Blog</Link>
                 <Link to='/contato' className={`/${path.split('/')[1]}` === '/contato' ? selectedClass : notSelectedClass}>Contato</Link>
                 <Link to='/sobre' className={`/${path.split('/sobre')[1]}` === '/' ? selectedClass : notSelectedClass}>Sobre</Link>
-                <Link to='login' className={`/${path.split('/')[1]}` === '/login' ? selectedClass : notSelectedClass}>Cadastro/Login</Link>
+                {(session && session.role === 'admin') ?
+                    <Link to='/admin' className={`/${path.split('/')[1]}` === '/admin' ? selectedClass : notSelectedClass}>Admin</Link> : null}
+                {session ? <Logout/> :
+                    <Link to='/login' className={`/${path.split('/')[1]}` === '/login' ? selectedClass : notSelectedClass}>Cadastro/Login</Link> }
             </div>
             <img className={'header-cart-img'} src={cart} alt={'carinho'}/>
         </div>
@@ -76,6 +93,7 @@ const Footer = function () {
 }
 
 const Layout: FC<ILayoutProps> = function ({children}) {
+
 	return (
 		<div style={{minHeight:'100%'}}>
             <Header/>
