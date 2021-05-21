@@ -84,6 +84,9 @@ const Carrousel = () => {
     );
 }
 
+const LeftNavBar =() => {
+
+}
 
 const Loja = () => {
     return (
