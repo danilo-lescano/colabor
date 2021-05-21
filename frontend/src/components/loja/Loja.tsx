@@ -85,7 +85,11 @@ const Carrousel = () => {
 }
 
 const LeftNavBar =() => {
-
+    return (
+        <div>
+            
+        </div>
+    );
 }
 
 const Loja = () => {
