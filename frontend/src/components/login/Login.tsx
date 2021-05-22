@@ -20,16 +20,14 @@ const Login = function () {
     return (
         session ? <Redirect to={'/'}/> :
         <>
+            <div style={{textAlign: 'center'}}>
             <h1>Login</h1>
-            <div className={'footer-login'}>
+            <div className={'footer-login'} style={{float: 'initial'}}>
                 Faça seu Login:<br/>
                 <input className={'footer-input'} placeholder={'Email'} type={'email'} onChange={(e)=>setEmail(e.target.value)}/><br/>
                 <input className={'footer-input'} placeholder={'Senha'} type={'password'} onChange={(e)=>setSenha(e.target.value)}/><br/><br/>
-                <span style={{float:'right'}} onClick={()=>tentarLogar(email, senha)}>OK</span>
-                <span style={{fontSize:'0.7em', fontWeight:'normal'}}>
-                    Ainda não tenho cadastro<br/>
-                    Esqueci minha senha
-                </span>
+                <span style={{cursor: 'pointer'}} onClick={()=>tentarLogar(email, senha)}>OK</span>
+            </div>
             </div>
         </>
     )

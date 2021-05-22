@@ -21,7 +21,10 @@ body {
 
 .header-box {
 	width: 70%;
-	margin: 0 15%;
+	min-width: 1000px;
+	max-width: 1080px;
+	margin-left: 50%;
+	transform: translateX(-50%);
 	height: 10rem;
 	position: relative;
 	font-family: SerifaStd;
@@ -72,6 +75,8 @@ body {
 .left-navbar-box {
 	position: relative;
 	display: inline-block;
+	width: 30%;
+	min-width: 300px;
 }
 .left-navbar-explore {
 	font-weight: bold;
@@ -182,17 +187,114 @@ body {
 
 .itens-loja-box {
 	display: inline-block;
-	width: 100px;
-	height: 100px;
-	background-color: blue;
+	width: 70%;
+	min-width: 700px;
 	vertical-align: top;
+	text-align: right;
 }
+.item-loja-card {
+	vertical-align: top;
+	display: inline-block;
+	width: 300px;
+	height: 380px;
+	text-align: left;
+}
+.item-loja-card:nth-child(2n) {
+	margin-left: 50px;
+}
+.item-loja-card:nth-child(n + 3) {
+	margin-top: 50px;
+}
+.item-loja-card:nth-child(odd):last-child {
+	transform: translate(calc(-100% - 50px));
+}
+.item-loja-card-minibox {
+	position: relative;
+	width: 300px;
+	height: 300px;
+	border: solid black 1px;
+	background-color: black;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+.item-loja-card-img {
+	position: absolute;
+	width: 300px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.item-loja-nome-preco-minibox {
+	display: inline-block;
+	font-weight: bold;
+	font-family: Futura;
+	width: 50%;
+}
+.item-loja-tags-minibox {
+	position: relative;
+	display: inline-block;
+	width: 50%;
+	font-family: Futura;
+	font-weight: bold;
+	font-size: .6em;
+	vertical-align: top;
+	padding-top: 5px;
+	text-align: right;
+}
+.item-loja-tag {
+	position: relative;
+	display: inline-block;
+	margin-left: 8px;
+	height: 22px;
+	width: 65px;
+	border-radius: 20px;
+	text-transform: uppercase;
+}
+.item-loja-tag-text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.item-loja-tag.assentos {
+	background-color: #48451c;
+	color: white;
+}
+.item-loja-tag.mesas {
+	background-color: #bf5928;
+}
+.item-loja-tag.armazenamento {
+	background-color: #68999e;
+	color: white;
+	font-size: .7em;
+}
+.item-loja-tag.acessorios {
+	background-color: #feba12;
+}
+.item-loja-tag.fretegratis {
+	background-color: #f91e2f;
+	color: white;
+}
+.item-loja-tag.promocao {
+	color: #f91e2f;
+	border: solid black 1px;
+}
+.item-loja-tag.normal {
+	border: solid black 1px;
+}
+
+
 
 
 
 .footer-box {
 	width: 70%;
-	margin: 10rem 15% 100px 15%;
+	min-width: 1000px;
+	max-width: 1080px;
+	margin-top: 10rem;
+	margin-bottom: 100px;
+	margin-left: 50%;
+	transform: translateX(-50%);
 	height: 10rem;
 	position: relative;
 	bottom: 0;

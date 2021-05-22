@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom"
+import GetItensLoja from "../../api/getItensLoja";
 import placeholder1 from '../../assets/placeholder1.png';
 
 interface ICarrouselImage {
@@ -134,8 +135,51 @@ const LeftNavBar =() => {
 }
 
 const ItensLoja = function() {
+    const [itensLoja, setItensLoja] = useState<any[]>([]);
+    
+    useEffect(()=>{
+        GetItensLoja()
+        .then((resp:any)=>{
+            setItensLoja(resp)
+            console.log(resp)
+        })
+        .catch((error)=>console.log(error))
+    }, [])
+
     return (
-        <div className={'itens-loja-box'}></div>
+        <div className={'itens-loja-box'}>
+            <div className={'item-loja-card'}>
+                <div className={'item-loja-card-minibox'}>
+                    <img src={'https://wallpaperaccess.com/full/124573.jpg'} className={'item-loja-card-img'}/>
+                </div>
+                <div className={'item-loja-nome-preco-minibox'}>
+                    <span>Banco</span><br/>
+                    <span style={{fontSize: '1.2em'}}>R$ XX,XX</span>
+                </div>
+                <div className={'item-loja-tags-minibox'}>
+                    <span className={'item-loja-tag assentos'}><span className={'item-loja-tag-text'}>assentos</span></span>
+                    <span className={'item-loja-tag normal'}><span className={'item-loja-tag-text'}>BANCOS</span></span>
+                </div>
+            </div>
+            {itensLoja.map((i)=>{
+                return (
+                    <div className={'item-loja-card'}>
+                        <div className={'item-loja-card-minibox'}>
+                            <img src={i.src} className={'item-loja-card-img'}/>
+                        </div>
+                        <div className={'item-loja-nome-preco-minibox'}>
+                            <span>{i.nome}</span><br/>
+                            <span style={{fontSize: '1.2em'}}>R$ {i.preco.toFixed(2)}</span>
+                        </div>
+                        <div className={'item-loja-tags-minibox'}>
+                            {i.tags?.map((t:any)=>{
+                                <span className={'item-loja-tag ' + t.className}><span className={'item-loja-tag-text'}>{t.texto}</span></span>
+                            })}
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
     )
 }
 
@@ -143,7 +187,7 @@ const Loja = () => {
     return (
         <>
             <Carrousel/>
-            <div style={{verticalAlign: 'top', position: 'relative', width: '70%', marginLeft: '50%', transform: 'translate(-50%)'}}>
+            <div style={{verticalAlign: 'top', position: 'relative', width: '70%', marginLeft: '50%', transform: 'translate(-50%)', minWidth: '1000px', maxWidth: '1080px'}}>
                 <LeftNavBar/>
                 <ItensLoja/>
             </div>
