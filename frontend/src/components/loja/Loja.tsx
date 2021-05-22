@@ -86,17 +86,67 @@ const Carrousel = () => {
 
 const LeftNavBar =() => {
     return (
-        <div>
-            
+        <div className={'left-navbar-box'}>
+            <div className={'left-navbar-explore'}>EXPLORE!</div>
+            <div>
+                <div className={'left-navbar-format-btn'}>
+                    <div className={'left-navbar-format-btn-line'}></div>
+                    <div className={'left-navbar-format-btn-line'}></div>
+                    <div className={'left-navbar-format-btn-line'}></div>
+                    <div className={'left-navbar-format-btn-line'}></div>
+                </div>
+                <div className={'left-navbar-format-btn'}></div>
+                <div className={'left-navbar-format-btn'}></div>
+            </div>
+            <div>
+                <input type={'text'} placeholder={'Pesquisar'} className={'left-navbar-input'}/>
+            </div>
+            <div className={'left-navbar-secao'}>
+                <div><span style={{backgroundColor: "#48451c"}}></span>ASSENTOS</div>
+                <div>Cadeiras</div>
+                <div>Poltronas</div>
+                <div>Bancos</div>
+                <div>Banquetas</div>
+            </div>
+            <div className={'left-navbar-secao'}>
+                <div><span style={{backgroundColor: "#bf5928"}}></span>MESAS</div>
+                <div>Estar/Jantar</div>
+                <div>Bancada</div>
+                <div>Escritório</div>
+                <div>Centro</div>
+                <div>Apoio</div>
+            </div>
+            <div className={'left-navbar-secao'}>
+                <div><span style={{backgroundColor: "#68999e"}}></span>ARMAZENAMENTO</div>
+                <div>Estantes</div>
+                <div>Armários</div>
+                <div>Prateleiras e painéis</div>
+                <div>Sapateiras</div>
+            </div>
+            <div className={'left-navbar-secao'}>
+                <div><span style={{backgroundColor: "#feba12"}}></span>ACESSÓRIOS</div>
+                <div>Iluminação</div>
+                <div>Escritório</div>
+            </div>
+            <div className={'left-navbar-texto-vazado'}><span style={{backgroundColor: "red"}}></span>OFERTAS/<br/>FRETE GRÁTIS</div>
         </div>
     );
+}
+
+const ItensLoja = function() {
+    return (
+        <div className={'itens-loja-box'}></div>
+    )
 }
 
 const Loja = () => {
     return (
         <>
             <Carrousel/>
-            <img src={placeholder1} style={{margin: '100px 15%'}}/>
+            <div style={{verticalAlign: 'top', position: 'relative', width: '70%', marginLeft: '50%', transform: 'translate(-50%)'}}>
+                <LeftNavBar/>
+                <ItensLoja/>
+            </div>
         </>
     )
 }
