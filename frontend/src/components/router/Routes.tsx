@@ -1,21 +1,21 @@
 import {Route, Switch} from 'react-router-dom';
+import {useState} from 'react';
 import Layout from '../layout/Layout';
 import Loja from '../loja/Loja';
 import Mesa from '../loja/Mesa';
 import Blog from '../blog/Blog';
 import Contato from '../contato/Contato';
 import Login from '../login/Login';
+import Admin from '../admin/Admin';
 
-// USER ROLES
-const ROOT = 'Root';
-const ADMIN = 'Admin';
-const CLIENT = 'Client';
-
-export const routes = {
-	home: {uri: '/', label: 'Loja', roles: [ROOT, ADMIN, CLIENT]},
-};
+function tryParse(str: string | null) {
+    if(!str)
+        return null;
+    return JSON.parse(str);
+}
 
 const Routes = () => {
+	const [session, setSession] = useState<any>(tryParse(localStorage.getItem('session')));
 
 	return (
 		<Switch>
@@ -29,6 +29,9 @@ const Routes = () => {
 				render={(props)=><Layout><Login/></Layout>}/>
 			<Route exact path={'/item-1'}
 				render={(props)=><Layout><Mesa/></Layout>}/>
+			{session ?
+				<Route exact path={'/admin'}
+					render={(props)=><Layout><Admin/></Layout>}/> : null}
 		</Switch>
 	);
 };

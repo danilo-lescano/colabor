@@ -3,34 +3,38 @@ const db = new AWS.DynamoDB.DocumentClient({ region: 'sa-east-1' });
 
 AWS.config.update({ region: 'sa-east-1' });
 
-const amILogged = async (tokenid) => {
-    const tokenparams = {
+const saveTokenLogin = async (usuario) => {
+    const params = {
         TableName: "logintoken",
-        Key: {
-            id: tokenid
+        Item: {
+            id: Date.now() + "-" + usuario.id,
+            usuarioId: usuario.id,
+            role: usuario.role
         }
-    };
-    return await db.get(tokenparams).promise();
+    }
+    await db.put(params).promise();
+    return params.Item;
 };
 
 exports.handler = async (event, content) => {
-    const params = {
-        TableName: "lojaitem",
-        Item: {
-            id: Date.now().toString(),
-            nome: event.nome,
-            preco: event.preco
-        }
-    };
-    const token = await amILogged(event.tokenid);
     
-    if(!token || token.Item.role !== "admin")
-        return { statusCode: 403 };
+    const params = {
+        TableName: "usuario",
+    };
+    
     try {
-        const data = await db.put(params).promise();
-        console.log(data);
+        const data = await db.scan(params).promise();
+        if(data.Items && data.Items.filter(i => i.email === event.email && i.senha === event.senha)) {
+            const u = data.Items.filter(i => i.email === event.email && i.senha === event.senha)[0];
+            const t = await saveTokenLogin(u);
+            if(t)
+                return {
+                    statusCode: 200,
+                    data: t
+                };
+        }
+        return null;
     } catch(err) {
         console.log(err);
     }
-    
 };
