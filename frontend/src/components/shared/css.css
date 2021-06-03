@@ -534,11 +534,11 @@ body {
 }
 .item-loja-descricao-box > img {
 	vertical-align: top;
-	width: 35%;
+	width: calc(35% - 30px);
+	margin-right: 30px;
 }
 .item-loja-descricao-box > div {
-	width: calc(65% - 30px);
-	margin-left: 30px;
+	width: 65%;
 	display: inline-block;
 }
 .item-loja-descricao-box > div > span {

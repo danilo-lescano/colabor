@@ -25,7 +25,6 @@ const Carrousel = (values: {imgs: string[]}) => {
     const {imgs} = {...values}
     const updateDot = () => {
         setIndexCurentImage((indexCurentImage+1)%carrouselImages.length);
-        
     }
     const updateDotBtn = (n: number) => {
         var index = (indexCurentImage + n) < 0 ? carrouselImages.length-1 : (indexCurentImage+n)%carrouselImages.length;
@@ -43,6 +42,7 @@ const Carrousel = (values: {imgs: string[]}) => {
         timeoutCarrousel.map(t => clearTimeout(t));
         timeoutCarrousel.push(setTimeout(()=>updateDot(), 7000));
     }, [indexCurentImage, carrouselImages]);
+    if(imgs.length === 0) return <span></span>;
 
     return (
         <div className={'carrousel-box'}>
@@ -66,6 +66,19 @@ const Item = () => {
     useEffect(()=>{
         GetItemLoja(lojaitemId)
         .then((resp:any)=>{
+            resp.nome = resp.nome ? resp.nome : '';
+            resp.preco = resp.preco ? parseFloat(resp.preco) : 0;
+            resp.descricao = resp.descricao ? resp.descricao : '';
+            resp.descricaoTecnica = resp.descricaoTecnica ? resp.descricaoTecnica : '';
+            resp.peso = resp.peso ? resp.peso : '';
+            resp.altura = resp.altura ? resp.altura : '';
+            resp.largura = resp.largura ? resp.largura : '';
+            resp.profundidade = resp.profundidade ? resp.profundidade : '';
+            resp.imagemPrincipal = resp.imagemPrincipal ? resp.imagemPrincipal : [];
+            resp.imagensCarrossel = resp.imagensCarrossel ? resp.imagensCarrossel : [];
+            resp.imagensMosaico = resp.imagensMosaico ? resp.imagensMosaico : [];
+            resp.imagemIcone = resp.imagemIcone ? resp.imagemIcone : [];
+            resp.categorias = resp.categorias ? resp.categorias : [];
             setItem(resp);
             console.log(item)
         });
@@ -104,8 +117,8 @@ const Item = () => {
                 </div>
             </div>
             <div className={'item-loja-descricao-box'}>
-                {<img src={item.imagemIcone}/>}
-                {<div><span>Descrição<br/><br/></span>{item.descricaoTecnica}</div>}
+                {item.imagemIcone[0] ? <img src={item.imagemIcone[0]}/> : null}
+                {item.descricaoTecnica ? <div><span>Descrição<br/><br/></span>{item.descricaoTecnica}</div> : null}
             </div>
         </> : null
     )

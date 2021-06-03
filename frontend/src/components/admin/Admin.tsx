@@ -2,6 +2,8 @@ import { useState } from "react"
 import PutItemLoja from '../../api/putItemLoja';
 
 const SendItem = async function (args: any) {
+    if(!args.nome || !args.preco || !args.descricao)
+    return;
     console.log(await PutItemLoja(args));
 }
 
@@ -77,7 +79,14 @@ const Admin = function () {
                 <label>Nome do Produto</label><br/>
                 <input type={'text'} onChange={(e)=>setNome(e.target.value)}/><br/><br/>
                 <label>Preço</label><br/>
-                <input type={'text'} onChange={(e)=>setPreco(e.target.value)}/><br/><br/>
+                <input type={'text'} onChange={(e) => {
+                    let aux: any = parseFloat(e.target.value.replace(',', '.'));
+                    if(isNaN(aux)) {
+                        e.target.value = '';
+                        return;
+                    }
+                    return setPreco(aux);
+                }}/><br/><br/>
                 <label>Descrição/Apresentação</label><br/>
                 <input type={'text'} onChange={(e)=>setDescricao(e.target.value)}/><br/><br/>
                 <label>Descrição Técnica</label><br/>
