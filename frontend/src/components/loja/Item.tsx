@@ -72,8 +72,7 @@ const Item = () => {
     },[])
 
     return (
-        item ?
-        <>
+        item ? <>
             <Carrousel imgs={item.imagensCarrossel}/>
             <br/>
             <div className={'item-loja-main-section-box'}>
