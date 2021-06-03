@@ -2,7 +2,7 @@ import {Route, Switch} from 'react-router-dom';
 import {useState} from 'react';
 import Layout from '../layout/Layout';
 import Loja from '../loja/Loja';
-import Mesa from '../loja/Mesa';
+import Item from '../loja/Item';
 import Blog from '../blog/Blog';
 import Contato from '../contato/Contato';
 import Login from '../login/Login';
@@ -27,8 +27,8 @@ const Routes = () => {
 				render={(props)=><Layout><Contato/></Layout>}/>
 			<Route exact path={'/login'}
 				render={(props)=><Layout><Login/></Layout>}/>
-			<Route exact path={'/item-1'}
-				render={(props)=><Layout><Mesa/></Layout>}/>
+			<Route exact path={'/item/:lojaitemId'}
+				render={(props)=><Layout><Item/></Layout>}/>
 			{session ?
 				<Route exact path={'/admin'}
 					render={(props)=><Layout><Admin/></Layout>}/> : null}

@@ -141,32 +141,20 @@ const ItensLoja = function() {
         GetItensLoja()
         .then((resp:any)=>{
             setItensLoja(resp)
-            console.log(resp)
         })
         .catch((error)=>console.log(error))
     }, [])
 
     return (
         <div className={'itens-loja-box'}>
-            <div className={'item-loja-card'}>
-                <div className={'item-loja-card-minibox'}>
-                    <img src={'https://wallpaperaccess.com/full/124573.jpg'} className={'item-loja-card-img'}/>
-                </div>
-                <div className={'item-loja-nome-preco-minibox'}>
-                    <span>Banco</span><br/>
-                    <span style={{fontSize: '1.2em'}}>R$ XX,XX</span>
-                </div>
-                <div className={'item-loja-tags-minibox'}>
-                    <span className={'item-loja-tag assentos'}><span className={'item-loja-tag-text'}>assentos</span></span>
-                    <span className={'item-loja-tag normal'}><span className={'item-loja-tag-text'}>BANCOS</span></span>
-                </div>
-            </div>
             {itensLoja.map((i)=>{
                 return (
                     <div className={'item-loja-card'}>
-                        <div className={'item-loja-card-minibox'}>
-                            <img src={i.src} className={'item-loja-card-img'}/>
-                        </div>
+                        <Link to={`/item/${i.id}`}>
+                            <div className={'item-loja-card-minibox'}>
+                                <img src={i.imagemPrincipal} className={'item-loja-card-img'}/>
+                            </div>
+                        </Link>
                         <div className={'item-loja-nome-preco-minibox'}>
                             <span>{i.nome}</span><br/>
                             <span style={{fontSize: '1.2em'}}>R$ {i.preco.toFixed(2)}</span>

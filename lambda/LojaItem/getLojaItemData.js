@@ -11,10 +11,8 @@ exports.handler = async (event, content) => {
             id: event.id
         }
     };
-    
     try {
         const data = await db.get(params).promise();
-        console.log(data);
         return {
             statusCode: 200,
             data: data.Item
@@ -22,5 +20,5 @@ exports.handler = async (event, content) => {
     } catch(err) {
         console.log(err);
     }
-    
+    return { statusCode: 404, data: event.id};
 };

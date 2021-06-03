@@ -22,7 +22,7 @@ async function uploadImage(file) {
         let type = file[i].split(';')[0].split('/')[1];
         let s3Params = {
             Bucket: 'colabor-s3-image',
-            Key: `img/${Date.now()}-${Math.random().toString().replace('.', '')}.${type}`,
+            Key: `${Date.now()}-${Math.random().toString().replace('.', '')}.${type}`,
             Body: base64Data,
             ACL: 'public-read',
             ContentEncoding: 'base64',
@@ -56,7 +56,7 @@ exports.handler = async (event, content) => {
             imagemPrincipal: await uploadImage(event.imagemPrincipal),
             imagensCarrossel: await uploadImage(event.imagensCarrossel),
             imagensMosaico: await uploadImage(event.imagensMosaico),
-            imagenIcone: await uploadImage(event.imagenIcone),
+            imagemIcone: await uploadImage(event.imagemIcone),
             categorias: event.categorias
         }
     };
@@ -67,7 +67,6 @@ exports.handler = async (event, content) => {
         return { statusCode: 403 };
     try {
         const data = await db.put(params).promise();
-        console.log(data);
     } catch(err) {
         console.log(err);
     }

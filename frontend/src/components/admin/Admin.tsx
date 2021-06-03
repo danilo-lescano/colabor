@@ -25,7 +25,7 @@ const Admin = function () {
     const [imagemPrincipal, setImagemPrincipal] = useState<any[]>();
     const [imagensCarrossel, setImagensCarrossel] = useState<any[]>();
     const [imagensMosaico, setImagensMosaico] = useState<any[]>();
-    const [imagenIcone, setImagenIcone] = useState<any[]>();
+    const [imagemIcone, setImagemIcone] = useState<any[]>();
     const [categorias, setCatecorias] = useState([] as string[]);
 
     const addCategoria = (e: any) => {
@@ -96,24 +96,55 @@ const Admin = function () {
                 <input type={'file'} onChange={(e)=>{
                     if(!e.target.files) setImagemPrincipal([]);
                     else {
-                        let r = new FileReader();
                         let arr = [] as any[];
-                        r.onload = ()=>{arr[arr.length] = r.result; setImagemPrincipal(arr)}
-                        for(let i = 0; i < e.target.files.length; i++)
+                        for(let i = 0; i < e.target.files.length; i++) {
+                            let r = new FileReader();
+                            r.onload = ()=>{arr[arr.length] = r.result; setImagemPrincipal(arr)}
                             r.readAsDataURL(e.target.files[i]);
+                        }
                     }
                 }}/><br/><br/>
                 <label>Imagens Carrossel</label><br/>
-                <input type={'file'}/><br/><br/>
+                <input type={'file'} onChange={(e)=>{
+                    if(!e.target.files) setImagensCarrossel([]);
+                    else {
+                        let arr = [] as any[];
+                        for(let i = 0; i < e.target.files.length; i++) {
+                            let r = new FileReader();
+                            r.onload = ()=>{arr[arr.length] = r.result; setImagensCarrossel(arr)}
+                            r.readAsDataURL(e.target.files[i]);
+                        }
+                    }
+                }} multiple/><br/><br/>
                 <label>Imagens Mosaico</label><br/>
-                <input type={'file'}/><br/><br/>
+                <input type={'file'} onChange={(e)=>{
+                    if(!e.target.files) setImagensMosaico([]);
+                    else {
+                        let arr = [] as any[];
+                        for(let i = 0; i < e.target.files.length; i++) {
+                            let r = new FileReader();
+                            r.onload = ()=>{arr[arr.length] = r.result; setImagensMosaico(arr)}
+                            r.readAsDataURL(e.target.files[i]);
+                        }
+                    }
+                }}/><br/><br/>
                 <label>Icone produto</label><br/>
-                <input type={'file'}/><br/><br/>
+                <input type={'file'} onChange={(e)=>{
+                    if(!e.target.files) setImagemIcone([]);
+                    else {
+                        let arr = [] as any[];
+                        for(let i = 0; i < e.target.files.length; i++) {
+                            let r = new FileReader();
+                            r.onload = ()=>{arr[arr.length] = r.result; setImagemIcone(arr)}
+                            r.readAsDataURL(e.target.files[i]);
+                        }
+                    }
+                }} multiple/><br/><br/>
             </div>
             <button onClick={()=>SendItem({
                 tokenid: session.id,
                 nome: nome,
-                preco: preco,
+                preco: parseFloat(preco),
                 descricao: descricao,
                 descricaoTecnica: descricaoTecnica,
                 peso: peso,
@@ -123,7 +154,7 @@ const Admin = function () {
                 imagemPrincipal: imagemPrincipal,
                 imagensCarrossel: imagensCarrossel,
                 imagensMosaico: imagensMosaico,
-                imagenIcone: imagenIcone,
+                imagemIcone: imagemIcone,
                 categorias: categorias
             })}>send</button>
         </div>
