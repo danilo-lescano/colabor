@@ -3,7 +3,7 @@ import PutItemLoja from '../../api/putItemLoja';
 
 const SendItem = async function (args: any) {
     if(!args.nome || !args.preco || !args.descricao)
-    return;
+        return;
     console.log(await PutItemLoja(args));
 }
 
@@ -17,7 +17,7 @@ const Checkbox = function (values: {tag: string, onChange: (e:any)=>void}) {
 const Admin = function () {
 	const [session, setSession] = useState<any>(JSON.parse(localStorage.getItem('session') as string));
     const [nome, setNome] = useState('');
-    const [preco, setPreco] = useState('');
+    const [preco, setPreco] = useState<number>();
     const [descricao, setDescricao] = useState('');
     const [descricaoTecnica, setDescricaoTecnica] = useState('');
     const [peso, setPeso] = useState('');
@@ -85,7 +85,7 @@ const Admin = function () {
                         e.target.value = '';
                         return;
                     }
-                    return setPreco(aux);
+                    setPreco(aux);
                 }}/><br/><br/>
                 <label>Descrição/Apresentação</label><br/>
                 <input type={'text'} onChange={(e)=>setDescricao(e.target.value)}/><br/><br/>
@@ -153,7 +153,7 @@ const Admin = function () {
             <button onClick={()=>SendItem({
                 tokenid: session.id,
                 nome: nome,
-                preco: parseFloat(preco),
+                preco: preco,
                 descricao: descricao,
                 descricaoTecnica: descricaoTecnica,
                 peso: peso,
