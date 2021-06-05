@@ -570,7 +570,6 @@ body {
 .listar-box > div:hover {
 	border: solid black 1px;
 	box-sizing: border-box;
-	cursor: pointer;
 }
 .admin-navgation {
 	color: rgba(0,0,0,0);
