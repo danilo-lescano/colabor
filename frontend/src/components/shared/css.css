@@ -540,9 +540,47 @@ body {
 .item-loja-descricao-box > div {
 	width: 65%;
 	display: inline-block;
+	text-align: justify;
 }
 .item-loja-descricao-box > div > span {
 	font-family: Futura;
 	font-size: 1.2em;
 	font-weight: bold;
+}
+
+
+
+.listar-box, .block {
+	width: 70%;
+	min-width: 1000px;
+	max-width: 1080px;
+	margin-left: 50%;
+	transform: translateX(-50%);
+	position: relative;
+	font-family: SerifaStd;
+	margin-bottom: 100px;
+}
+.listar-box > div:nth-child(odd) {
+	background-color: rgba(0,0,0,.2);
+}
+.listar-box > div:nth-child(even) {
+	background-color: rgba(0,0,0,.05);
+}
+
+.listar-box > div:hover {
+	border: solid black 1px;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+.admin-navgation {
+	color: rgba(0,0,0,0);
+	font-family: FuturaExtraBold;
+    -webkit-text-stroke: 1px black;
+}
+.admin-navgation > span.ativo, .admin-navgation > span:hover {
+	color: black;
+	cursor: pointer;
+}
+.display-none {
+	display: none;
 }

@@ -44,7 +44,7 @@ exports.handler = async (event, content) => {
     const params = {
         TableName: "lojaitem",
         Item: {
-            id: Date.now().toString(),
+            id: event.id ? event.id : Date.now().toString(),
             nome: event.nome,
             preco: event.preco,
             descricao: event.descricao,
@@ -64,11 +64,12 @@ exports.handler = async (event, content) => {
     const token = await amILogged(event.tokenid);
     
     if(!token || token.role !== "admin")
-        return { statusCode: 403 };
+        return { statusCode: 403, data: false };
     try {
         const data = await db.put(params).promise();
+        return { statusCode: 200, data: true };
     } catch(err) {
         console.log(err);
+        return { statusCode: 500, data: false };
     }
-    return true;
 };
