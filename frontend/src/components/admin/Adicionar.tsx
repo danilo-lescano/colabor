@@ -17,7 +17,8 @@ const Checkbox = function (values: {tag: string, onChange: (e:any)=>void, checke
     )
 }
 
-const Adicionar = function (args: {id?:string}) {
+const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
+    const {iAddCallback} = {...args};
 	const [session, setSession] = useState<any>(JSON.parse(localStorage.getItem('session') as string));
     const [id, setId] = useState('');
     const [nome, setNome] = useState('');
@@ -265,6 +266,7 @@ const Adicionar = function (args: {id?:string}) {
                         imagemIcone: imagemIcone,
                         categorias: categorias
                     });
+                    iAddCallback();
                 }catch(err){
                     setSendItesFlag(false);
                 }

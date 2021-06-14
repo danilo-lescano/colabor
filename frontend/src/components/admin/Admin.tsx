@@ -5,11 +5,16 @@ import Listar from "./Listar";
 const Admin = function () {
     const [tabAtiva, setTabAtiva] = useState('Adicionar');
     const [itemId, setItemId] = useState('');
+    const [renderFlag, setRenderFlag] = useState(true);
     const none = 'display-none';
 
     const updateItem = (id:string) => {
         setItemId(id);
         setTabAtiva('Adicionar');
+    };
+
+    const reRender = () => {
+        setRenderFlag(!renderFlag);
     };
 
     return (
@@ -21,8 +26,8 @@ const Admin = function () {
                 </h1>
             </div>
 
-            <span className={tabAtiva !== 'Adicionar' ? none : ''}><Adicionar id={itemId}/></span>
-            <span className={tabAtiva !== 'Listar' ? none : ''}><Listar update={updateItem}/></span>
+            <span className={tabAtiva !== 'Adicionar' ? none : ''}><Adicionar id={itemId} iAddCallback={reRender}/></span>
+            <span className={tabAtiva !== 'Listar' ? none : ''}><Listar update={updateItem} reRender={renderFlag}/></span>
         </>
     )
 }

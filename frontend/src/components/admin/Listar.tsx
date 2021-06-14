@@ -2,27 +2,34 @@ import { useEffect, useState } from "react"
 import GetItensLoja from "../../api/getItensLoja";
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import DeleteItemLoja from "../../api/deleteItemLoja";
+import Spinner from "../acessorios/Spinner";
 
-const Listar = function (args:{update: (id:string)=>void}) {
+const Listar = function (args:{update: (id:string)=>void, reRender?:Boolean}) {
 	const [session, setSession] = useState<any>(JSON.parse(localStorage.getItem('session') as string));
     const [items, setItems] = useState<any>([]);
+    const [spinerFlag, setSpinnerFlag] = useState<any>({});
 
-    const {update} = {...args};
+    const {update, reRender} = {...args};
 
-    const getItems = () => {
-        GetItensLoja()
+    const getItems = async () => {
+        await GetItensLoja()
         .then((items)=>{
             setItems(items);
         })
         .catch((e)=>console.log(e))
+        return;
     };
     useEffect(()=>{
         getItems();
-    }, [])
+    }, [reRender])
     
     const deleteItem = async (id: string) => {
+        spinerFlag[id] = true;
+        setSpinnerFlag({...spinerFlag});
         await DeleteItemLoja({id: id, tokenid: session.id});
-        getItems();
+        await getItems();
+        spinerFlag[id] = false;
+        setSpinnerFlag({...spinerFlag});
     };
 
     return (
@@ -33,12 +40,13 @@ const Listar = function (args:{update: (id:string)=>void}) {
                     <div style={{position:'relative', height: 70}}>
                         <img style={{marginLeft: 5, position:'absolute',top:'50%',transform:'translateY(-50%)',width: 50}} src={i.imagemPrincipal}/>
                         <span style={{marginLeft: 10, position:'absolute',top:'50%',transform:'translateY(-50%)', left:50}}>{i.nome}</span>
-                        <div style={{display:'inline-block', fontSize: '1.2em', right: 40, top: '50%', transform:'translateY(-50%)', position:'absolute', cursor:'pointer'}} onClick={()=>update(i.id)} >
+                        
+                        {spinerFlag[i.id] ? <span style={{transform:'translateY(-50%)', right: 10}}><Spinner/></span> : <div style={{display:'inline-block', fontSize: '1.2em', right: 40, top: '50%', transform:'translateY(-50%)', position:'absolute', cursor:'pointer'}} onClick={()=>update(i.id)} >
                             <AiFillEdit/>
-                        </div>
-                        <div style={{display:'inline-block', fontSize: '1.2em', right: 10, top: '50%', transform:'translateY(-50%)', position:'absolute', cursor:'pointer'}} onClick={()=>deleteItem(i.id)}>
+                        </div>}
+                        {spinerFlag[i.id] ? <span style={{position:'absolute', transform:'translateY(-50%)', top:'50%', right: 10}}><Spinner/></span> : <div style={{display:'inline-block', fontSize: '1.2em', right: 10, top: '50%', transform:'translateY(-50%)', position:'absolute', cursor:'pointer'}} onClick={()=>deleteItem(i.id)}>
                             <AiFillDelete/>
-                        </div>
+                        </div>}
                     </div>
                 );
             })}
