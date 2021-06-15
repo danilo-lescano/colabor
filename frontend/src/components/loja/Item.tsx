@@ -75,10 +75,21 @@ const Item = () => {
             resp.largura = resp.largura ? resp.largura : '';
             resp.profundidade = resp.profundidade ? resp.profundidade : '';
             resp.imagemPrincipal = resp.imagemPrincipal ? resp.imagemPrincipal : [];
-            resp.imagensCarrossel = resp.imagensCarrossel ? resp.imagensCarrossel : [];
-            resp.imagensMosaico = resp.imagensMosaico ? resp.imagensMosaico : [];
+            resp.imagensCarrossel = [];
+            resp.imagensMosaico = [];
             resp.imagemIcone = resp.imagemIcone ? resp.imagemIcone : [];
             resp.categorias = resp.categorias ? resp.categorias : [];
+
+            if(resp.imagemCarrossel1) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel1);
+            if(resp.imagemCarrossel2) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel2);
+            if(resp.imagemCarrossel3) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel3);
+            if(resp.imagemCarrossel4) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel4);
+            if(resp.imagemCarrossel5) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel5);
+            if(resp.imagemCarrossel6) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel6);
+
+            if(resp.imagemMosaico1) resp.imagensMosaico = resp.imagensMosaico.concat(resp.imagemMosaico1);
+            if(resp.imagemMosaico2) resp.imagensMosaico = resp.imagensMosaico.concat(resp.imagemMosaico2);
+            if(resp.imagemMosaico3) resp.imagensMosaico = resp.imagensMosaico.concat(resp.imagemMosaico3);
             setItem(resp);
             console.log(item)
         });

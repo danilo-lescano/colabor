@@ -35,41 +35,73 @@ async function uploadImage(file) {
         } catch (error) {
             console.error(error);
             throw error;
+            //return { statusCode: 500, data: {mensagem: 'Erro interno no servidor (err A2)', status: false} };
         }
     }
     return resp;
 }
 
-exports.handler = async (event, content) => {
+const putItem = async (data) => {
+    const item = data.item;
     const params = {
         TableName: "lojaitem",
         Item: {
-            id: event.id ? event.id : Date.now().toString(),
-            nome: event.nome,
-            preco: event.preco,
-            descricao: event.descricao,
-            descricaoTecnica: event.descricaoTecnica,
-            peso: event.peso,
-            altura: event.altura,
-            largura: event.largura,
-            profundidade: event.profundidade,
-            imagemPrincipal: await uploadImage(event.imagemPrincipal),
-            imagensCarrossel: await uploadImage(event.imagensCarrossel),
-            imagensMosaico: await uploadImage(event.imagensMosaico),
-            imagemIcone: await uploadImage(event.imagemIcone),
-            categorias: event.categorias
+            id: item.id ? item.id : Date.now().toString(),
+            ...item
         }
     };
+    try {
+        await db.put(params).promise();
+        return { statusCode: 200, data: {mensagem: '', status: true} };
+    } catch(err) {
+        console.log(err);
+        return { statusCode: 500, data: {mensagem: 'Erro interno no servidor (err A1)', status: false} };
+    }
+};
+const _getItem = async (id) => {
+    const params = {
+        TableName: "lojaitem",
+        Key: { id: id }
+    };
+    try {
+        const resp = await db.get(params).promise();
+        return resp.Item;
+    } catch(err) {
+        return { statusCode: 500, data: {mensagem: 'Erro interno no servidor (err A3)', status: false} };
+    }
+};
+const _deleteImageS3 = async (url) => {
+    //todo
+    return;
+};
+const removeImagem = async (data) => {
+    const item = await _getItem(data.id);
+    if(item.statusCode) return item;
+    await _deleteImageS3(item[data.imagemNome]);
+    item[data.imagemNome] = '';
+    return await putItem({item:item});
+};
+const putImagem = async (data) => {
+    const item = await _getItem(data.id);
+    if(item.statusCode) return item;
+    if(item[data.imagemNome])
+        await _deleteImageS3(item[data.imagemNome]);
+    item[data.imagemNome] = await uploadImage(data.imagem);
+    return await putItem({item:item});
+};
 
+exports.handler = async (event, content) => {
     const token = await amILogged(event.tokenid);
     
     if(!token || token.role !== "admin")
         return { statusCode: 403, data: false };
-    try {
-        const data = await db.put(params).promise();
-        return { statusCode: 200, data: true };
-    } catch(err) {
-        console.log(err);
-        return { statusCode: 500, data: false };
-    }
+    
+    if(event.operation === 'putItem') //or update item
+        return await putItem(event.data);
+    else if(event.operation === 'putImagem')
+        return await putImagem(event.data);
+    else if(event.operation === 'removeImagem')
+        return await removeImagem(event.data);
+    else
+        return { statusCode: 400 }
 };

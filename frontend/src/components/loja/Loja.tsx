@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom"
 import GetItensLoja from "../../api/getItensLoja";
-import placeholder1 from '../../assets/placeholder1.png';
 
 interface ICarrouselImage {
     src: string;
