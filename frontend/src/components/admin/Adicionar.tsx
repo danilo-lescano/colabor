@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { getAllCategorias } from "../../api/categoriaAPI";
 import GetItemLoja from "../../api/getItemLoja";
 import PutItemLoja from '../../api/putItemLoja';
 import Spinner from "../acessorios/Spinner";
@@ -8,17 +9,18 @@ const SendItem = async function (args: any) {
     return;
 }
 
-const Checkbox = function (values: {tag: string, onChange: (e:any)=>void, checked?:boolean}) {
-    const {tag, onChange, checked} = {...values}
+const Checkbox = function (values: {tag: string, onClick: (e:any)=>void, lista?:any}) {
+    const {tag, onClick, lista} = {...values}
+    const [flag, setFlag] = useState(false);
+    const updateOnChange = ()=>setFlag(!flag);
     return (
-        <label><input type={'checkbox'} name={tag} onChange={(e)=>onChange(e as any)} checked={checked}/>{tag}</label>
+        <label key={tag+"-checkbox"}><input type={'checkbox'} name={tag} onClick={(e)=>{onClick(e as any); updateOnChange();}} checked={lista.includes(tag)}/>{tag}</label>
     )
 }
 
 const DropImage = function (values: {url?: string, onChange: (e:any, c:()=>void)=>void}) {
     const {url, onChange} = {...values};
     const [isDropover, setIsDropover] = useState(false);
-    const [randomId] = useState(Date.now().toString());
     const [isLoading, setIsLoading] = useState(false);
 
     const onDrop = async (e: any) => {
@@ -64,6 +66,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
     const [imagemMosaico3, setImagemMosaico3] = useState('');
     const [imagemIcone, setImagemIcone] = useState('');
     const [categorias, setCatecorias] = useState([] as string[]);
+    const [categoriasTipo, setCategoriaTipos] = useState<any>([] as string[]);
     
     const [sendItesFlag, setSendItesFlag] = useState(false);
 
@@ -71,6 +74,17 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
         loadItem();
     },[args])
 
+    useEffect(()=>{
+        callGetAllCategorias();
+    },[])
+
+
+    const callGetAllCategorias = async () => {
+        const aux_categorias = await getAllCategorias({tokenid: session.id});
+        if(aux_categorias) {
+            setCategoriaTipos(aux_categorias);
+        }
+    }
     const loadItem = () => {
         if(args && args.id) {
             GetItemLoja(args.id)
@@ -104,7 +118,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
     };
 
     const addCategoria = (e: any) => {
-        if(e.target.checked) {
+        if(!categorias.includes(e.target.name)) {
             categorias[categorias.length] = e.target.name;
             setCatecorias(categorias);
         }
@@ -116,6 +130,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             }
             setCatecorias(arr);
         }
+        //console.log(categorias, categorias.includes(e.target.name))
     };
 
     const updateImagem = async (e: any, callback:()=>void, inputId: string) => {
@@ -151,30 +166,19 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
         <div style={{position: 'relative', width: '70%', maxWidth: '1080px', minWidth: '1000px', marginLeft: '50%', transform: 'translate(-50%)'}}>
             <div style={{display: 'inline-block'}}>
                 <span>Categorias</span><br/><br/>
-                <Checkbox tag={'Assentos'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Assentos')}/><br/>
-                <Checkbox tag={'Cadeiras'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Cadeiras')}/><br/>
-                <Checkbox tag={'Poltronas'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Poltronas')}/><br/>
-                <Checkbox tag={'Bancos'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Bancos')}/><br/>
-                <Checkbox tag={'Banquetas'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Banquetas')}/><br/>
-                <Checkbox tag={'Mesas'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Mesas')}/><br/>
-                <Checkbox tag={'Estar/Jantar'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Estar/Jantar')}/><br/>
-                <Checkbox tag={'Bancada'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Bancada')}/><br/>
-                <Checkbox tag={'Escritório'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Escritório')}/><br/>
-                <Checkbox tag={'Centro'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Centro')}/><br/>
-                <Checkbox tag={'Apoio'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Apoio')}/><br/>
-                <Checkbox tag={'Armazenamento'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Armazenamento')}/><br/>
-                <Checkbox tag={'Estantes'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Estantes')}/><br/>
-                <Checkbox tag={'Armários'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Armários')}/><br/>
-                <Checkbox tag={'Aparador'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Aparador')}/><br/>
-                <Checkbox tag={'Prateleiras e painéis'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Prateleiras e painéis')}/><br/>
-                <Checkbox tag={'Sapateiras'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Sapateiras')}/><br/>
-                <Checkbox tag={'Acessórios'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Acessórios')}/><br/>
-                <Checkbox tag={'Iluminação'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Iluminação')}/><br/>
-                <Checkbox tag={'Escritório'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Escritório')}/><br/>
-                <Checkbox tag={'Ofertas'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Ofertas')}/><br/>
-                <Checkbox tag={'Frete Grátis'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('Frete Grátis')}/><br/>
-                <Checkbox tag={'10%'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('10%')}/><br/>
-                <Checkbox tag={'30%'} onChange={(e: any) => addCategoria(e)} checked={categorias.includes('30%')}/><br/>
+
+                {Object.values(categoriasTipo).map((c:any)=>{
+                    return (<>
+                        {c.titulo !== 'oferta' ? <span style={{width:15, height: 15, backgroundColor:c.categoriaCor, position: 'relative', display: "inline-block", borderRadius:'100%'}}></span> : null}
+                        <b>{c.titulo}</b><br/>
+                        {Object.values(c.subCategorias).map((sc:any)=>{
+                            return (<>
+                                <Checkbox tag={sc} onClick={(e: any) => addCategoria(e)} lista={categorias}/><br/>
+                            </>);
+                        })}
+                        <br/>
+                    </>);
+                })}
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <input type={'hidden'} value={id}/>
@@ -253,7 +257,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                     <DropImage url={imagemMosaico3} onChange={(e, c:()=>void)=>{updateImagem(e, c, 'imagemMosaico3')}}/>
                     {imagemMosaico3 && imagemMosaico3.length > 0 ? <span onClick={()=>deleteImage('imagemMosaico3')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                 </span><div style={{width: 5, display: 'inline-block'}}></div>
-            </div>
+            </div><br/>
             <button disabled={sendItesFlag} onClick={async()=>{
                 setSendItesFlag(true);
                 try {
