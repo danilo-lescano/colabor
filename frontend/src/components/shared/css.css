@@ -249,7 +249,6 @@ body {
 	width: 65px;
 	border-radius: 20px;
 	text-transform: uppercase;
-	border: solid black 1px;
 }
 .item-loja-tag-text {
 	position: absolute;
@@ -257,20 +256,8 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
-.item-loja-tag.assentos {
-	background-color: #48451c;
+.item-loja-tag.categorias {
 	color: white;
-}
-.item-loja-tag.mesas {
-	background-color: #bf5928;
-}
-.item-loja-tag.armazenamento {
-	background-color: #68999e;
-	color: white;
-	font-size: .7em;
-}
-.item-loja-tag.acessorios {
-	background-color: #feba12;
 }
 .item-loja-tag.fretegratis {
 	background-color: #f91e2f;
@@ -280,9 +267,95 @@ body {
 	color: #f91e2f;
 	border: solid black 1px;
 }
-.item-loja-tag.normal {
+.item-loja-tag.subcategoria {
 	border: solid black 1px;
 }
+
+
+
+
+.item-loja-box.tuple-mode {
+	text-align: initial;
+}
+.item-loja-card.tuple-mode {
+	width: initial;
+	height: initial;
+	display: block;
+}
+.item-loja-card.tuple-mode:nth-child(n+2) {
+	margin: 60px 0 0 0;
+}
+.item-loja-card.tuple-mode:nth-child(odd):last-child {
+	transform: none;
+}
+.item-loja-card-minibox.tuple-mode {
+	width: 200px;
+	height: 200px;
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+}
+.item-loja-card-img.tuple-mode {
+	width: 200px;
+}
+.item-loja-nome-preco-minibox.tuple-mode {
+	margin-left: 30px;
+	font-size: 1.3em;
+}
+.item-loja-tags-minibox.tuple-mode {
+	margin-left: 22px;
+	text-align: left;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+.item-loja-tag.tuple-mode {
+	height: 44px;
+	width: 130px;
+	border-radius: 30px;
+	font-size: 2em;
+}
+.item-loja-span.tuple-mode {
+	display: inline-block;
+	position: relative;
+	width: calc(100% - 200px);
+	height: 200px;
+}
+
+
+
+.item-loja-box.page-mode {
+	text-align: initial;
+}
+.item-loja-card.page-mode {
+	width: initial;
+	height: initial;
+	display: block;
+}
+.item-loja-card.page-mode {
+	width: 100%;
+}
+.item-loja-card-minibox.page-mode {
+	width: 100%;
+	padding-bottom: 100%;
+	height: 0px;
+}
+.item-loja-card-img.page-mode {
+	width: 100%;
+}
+.item-loja-card.page-mode:nth-child(odd):last-child {
+	transform: none;
+}
+
+.item-loja-card.page-mode {
+	margin: 0;
+}
+
+
+
+
+
+
 
 
 
