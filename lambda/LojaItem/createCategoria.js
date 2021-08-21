@@ -5,6 +5,7 @@ const db = new AWS.DynamoDB.DocumentClient({ region: 'sa-east-1' });
 AWS.config.update({ region: 'sa-east-1' });
 
 const amILogged = async (tokenid) => {
+    if(!tokenid) return false;
     const tokenparams = {
         TableName: "logintoken",
         Key: {

@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom"
+import { getAllCategorias } from "../../api/categoriaAPI";
 import GetItensLoja from "../../api/getItensLoja";
 
-interface ICarrouselImage {
-    src: string;
-    link: string;
-}
+
 const getCarrouselImages = () => {
     return [
         {
@@ -85,6 +83,15 @@ const Carrousel = () => {
 }
 
 const LeftNavBar =() => {
+    const [categorias, setCategorias] = useState<any[]>([]);
+    
+    useEffect(()=>{
+        getAllCategorias({})
+        .then((resp:any)=>{
+            setCategorias(resp);
+        })
+        .catch((error)=>console.log(error));
+    }, [])
     return (
         <div className={'left-navbar-box'}>
             <div className={'left-navbar-explore'}>EXPLORE!</div>
@@ -101,68 +108,87 @@ const LeftNavBar =() => {
             <div>
                 <input type={'text'} placeholder={'Pesquisar'} className={'left-navbar-input'}/>
             </div>
-            <div className={'left-navbar-secao'}>
-                <div><span style={{backgroundColor: "#48451c"}}></span>ASSENTOS</div>
-                <div>Cadeiras</div>
-                <div>Poltronas</div>
-                <div>Bancos</div>
-                <div>Banquetas</div>
-            </div>
-            <div className={'left-navbar-secao'}>
-                <div><span style={{backgroundColor: "#bf5928"}}></span>MESAS</div>
-                <div>Estar/Jantar</div>
-                <div>Bancada</div>
-                <div>Escritório</div>
-                <div>Centro</div>
-                <div>Apoio</div>
-            </div>
-            <div className={'left-navbar-secao'}>
-                <div><span style={{backgroundColor: "#68999e"}}></span>ARMAZENAMENTO</div>
-                <div>Estantes</div>
-                <div>Armários</div>
-                <div>Prateleiras e painéis</div>
-                <div>Sapateiras</div>
-            </div>
-            <div className={'left-navbar-secao'}>
-                <div><span style={{backgroundColor: "#feba12"}}></span>ACESSÓRIOS</div>
-                <div>Iluminação</div>
-                <div>Escritório</div>
-            </div>
+            {categorias.map((c)=>{
+                return (c.titulo.toLowerCase() !== 'oferta' ? <div className={'left-navbar-secao'}>
+                    <div><span style={{backgroundColor: c.categoriaCor}}></span>{c.titulo.toUpperCase()}</div>
+                    {c.subCategorias.map((sc:any)=>{
+                        return <div>{sc}</div>
+                    })}
+                </div> : null)
+            })}
             <div className={'left-navbar-texto-vazado'}><span style={{backgroundColor: "red"}}></span>OFERTAS/<br/>FRETE GRÁTIS</div>
         </div>
     );
 }
 
-const ItensLoja = function() {
+const ItensLojaFormatoCards = function() {
     const [itensLoja, setItensLoja] = useState<any[]>([]);
+    const [categorias, setCategorias] = useState<any[]>([]);
+    const [renderMode, setRenderMode] = useState('page-mode'); //useState('tuple-mode'); //useState('card-mode');
     
     useEffect(()=>{
-        GetItensLoja()
+        let promises = [];
+        let aux_categorias: any[];
+        let aux_itens: any[];
+        promises[0] = GetItensLoja()
         .then((resp:any)=>{
-            setItensLoja(resp)
+            aux_itens = resp;
         })
-        .catch((error)=>console.log(error))
+        .catch((error)=>console.log(error));
+
+        promises[1] = getAllCategorias({})
+        .then((resp:any)=>{
+            aux_categorias = resp;
+        })
+        .catch((error)=>console.log(error));
+
+        Promise.all(promises).then(()=>{
+            for(let i = 0; i < aux_categorias.length; ++i) {
+                for(let k = 0; k < aux_itens.length; ++k) {
+                    let flag = false;
+                    for(let l = 0; l < aux_itens[k].categorias.length; ++l) {
+                        if(aux_categorias[i].subCategorias.includes(aux_itens[k].categorias[l])) {
+                            if(!aux_itens[k].tags) aux_itens[k].tags = [];
+                            if(!flag) {
+                                flag = true;
+                                aux_itens[k].tags[aux_itens[k].tags.length] = {
+                                    texto: aux_categorias[i].titulo,
+                                    cor: aux_categorias[i].categoriaCor,
+                                    cssClass: 'categoria'
+                                }
+                            }
+                            aux_itens[k].tags[aux_itens[k].tags.length] = {
+                                texto: aux_itens[k].categorias[l],
+                                cssClass: 'subcategoria'
+                            }
+                        }
+                    }
+                }
+            }
+            setItensLoja(aux_itens);
+            setCategorias(aux_categorias);
+        });
     }, [])
 
     return (
-        <div className={'itens-loja-box'}>
+        <div className={'itens-loja-box ' + renderMode}>
             {itensLoja.map((i)=>{
                 return (
-                    <div className={'item-loja-card'}>
+                    <div className={'item-loja-card ' + renderMode}>
                         <Link to={`/item/${i.id}`}>
-                            <div className={'item-loja-card-minibox'}>
-                                <img src={i.imagemPrincipal} className={'item-loja-card-img'}/>
+                            <div className={'item-loja-card-minibox ' + renderMode}>
+                                <img src={i.imagemPrincipal} className={'item-loja-card-img ' + renderMode}/>
                             </div>
                         </Link>
-                        <div className={'item-loja-nome-preco-minibox'}>
-                            <span>{i.nome}</span><br/>
-                            <span style={{fontSize: '1.2em'}}>R$ {i.preco.toFixed(2)}</span>
-                        </div>
-                        <div className={'item-loja-tags-minibox'}>
-                            {i.tags?.map((t:any)=>{
-                                <span className={'item-loja-tag ' + t.className}><span className={'item-loja-tag-text'}>{t.texto}</span></span>
-                            })}
-                        </div>
+                        <span className={'item-loja-span ' + renderMode}>
+                            <div className={'item-loja-nome-preco-minibox ' + renderMode}>
+                                <span>{i.nome}</span><br/>
+                                <span style={{fontSize: '1.2em'}}>R$ {i.preco.toFixed(2)}</span>
+                            </div>
+                            <div className={'item-loja-tags-minibox ' + renderMode}>
+                                {i.tags?.map((t:any)=><span className={'item-loja-tag ' + renderMode + ' ' + t.cssClass} style={{backgroundColor: t.cor}}><span className={'item-loja-tag-text ' + renderMode}>{t.texto}</span></span>)}
+                            </div>
+                        </span>
                     </div>
                 )
             })}
@@ -176,7 +202,7 @@ const Loja = () => {
             <Carrousel/>
             <div style={{verticalAlign: 'top', position: 'relative', width: '70%', marginLeft: '50%', transform: 'translate(-50%)', minWidth: '1000px', maxWidth: '1080px'}}>
                 <LeftNavBar/>
-                <ItensLoja/>
+                <ItensLojaFormatoCards/>
             </div>
         </>
     )
