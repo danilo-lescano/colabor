@@ -16,8 +16,7 @@ const saveTokenLogin = async (usuario) => {
     return params.Item;
 };
 
-exports.handler = async (event, content) => {
-    
+exports.handler = async (event, content, callback) => {
     const params = {
         TableName: "usuario",
     };
@@ -28,13 +27,22 @@ exports.handler = async (event, content) => {
             const u = data.Items.filter(i => i.email === event.email && i.senha === event.senha)[0];
             const t = await saveTokenLogin(u);
             if(t)
-                return {
+                return callback({
                     statusCode: 200,
-                    data: t
-                };
+                    headers: {'Access-Control-Allow-Origin': '*'},
+                    body: JSON.stringify({data: t})
+                });
         }
-        return null;
+        return callback({
+            statusCode: 400,
+            headers: {'Access-Control-Allow-Origin': '*'},
+            body: JSON.stringify({mensagem: 'login inválido'})
+        });;
     } catch(err) {
-        console.log(err);
+        callback({
+            statusCode: 500,
+            headers: {'Access-Control-Allow-Origin': '*'},
+            body: JSON.stringify({message:'erro no servidor login-42', erro: err})
+        });
     }
 };
