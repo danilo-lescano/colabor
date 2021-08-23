@@ -26,7 +26,7 @@ const mountResponse = (statusCode, data, message) => {
     }
 }
 
-const createItem = async (data, callback) => {
+const createCategoria = async (data, callback) => {
     //const token = await amILogged(data.tokenid);
     //if(!token || token.role !== "admin")
     //callback(mountResponse(403, null, 'não autorizado'));
@@ -36,37 +36,37 @@ const createItem = async (data, callback) => {
     //TO DO
 };
 
-const updateItem = async (data, callback) => {
+const updateCategoria = async (data, callback) => {
     callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
     //TO DO
 };
 
-const getAllItems = async (data, callback) => {
+const getAllCategorias = async (data, callback) => {
     callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
     //TO DO
 };
 
-const getItem = async (data, callback) => {
+const getCategoria = async (data, callback) => {
     callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
     //TO DO
 };
 
-const deleteItem = async (data, callback) => {
+const deleteCategoria = async (data, callback) => {
     callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
     //TO DO
 };
 
 exports.handler = async (event, content, callback) => {
     if(event.operation === 'getall')
-        getAllItems(event.data, callback);
+        getAllCategorias(event.data, callback);
     else if(event.operation === 'get')
-        getItem(event.data, callback);
+        getCategoria(event.data, callback);
     else if(event.operation === 'create')
-        createItem(event.data, callback);
+        createCategoria(event.data, callback);
     else if(event.operation === 'update')
-        updateItem(event.data, callback);
+        updateCategoria(event.data, callback);
     else if(event.operation === 'delete')
-        deleteItem(event.data, callback);
+        deleteCategoria(event.data, callback);
     else
         callback({
             statusCode: 400,
