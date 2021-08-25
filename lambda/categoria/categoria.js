@@ -15,44 +15,44 @@ const amILogged = async (tokenid) => {
     return (await db.get(tokenparams).promise()).Item;
 };
 
-const mountResponse = (statusCode, data, message) => {
+const mountResponse = (statusCode, data, message, callback) => {
     const resp = {};
     if(data) resp.data = data;
     if(message) resp.message = message;
-    return {
+    callback({
         statusCode: statusCode,
         headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(resp)
-    }
+    });
 }
 
 const createCategoria = async (data, callback) => {
     //const token = await amILogged(data.tokenid);
     //if(!token || token.role !== "admin")
-    //callback(mountResponse(403, null, 'não autorizado'));
+    //mountResponse(403, null, 'não autorizado', callback);
     
-    callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
+    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
 
     //TO DO
 };
 
 const updateCategoria = async (data, callback) => {
-    callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
+    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
     //TO DO
 };
 
 const getAllCategorias = async (data, callback) => {
-    callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
+    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
     //TO DO
 };
 
 const getCategoria = async (data, callback) => {
-    callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
+    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
     //TO DO
 };
 
 const deleteCategoria = async (data, callback) => {
-    callback(mountResponse(400, null, 'METHOD NOT IMPLEMENTED'));
+    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
     //TO DO
 };
 
@@ -68,9 +68,5 @@ exports.handler = async (event, content, callback) => {
     else if(event.operation === 'delete')
         deleteCategoria(event.data, callback);
     else
-        callback({
-            statusCode: 400,
-            headers: {'Access-Control-Allow-Origin': '*'},
-            body: JSON.stringify({message:'operação não encontrada'})
-        });
+        mountResponse(400, null, 'operação não encontrada', callback);
 };
