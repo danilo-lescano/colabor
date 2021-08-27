@@ -1,5 +1,8 @@
+import Subcategoria from "./Subcatecorias";
+
 export default interface Categoria {
-	id: number;
+	id: string;
     nome: string;
     cor: string;
+    subcategorias?: Subcategoria[];
 }

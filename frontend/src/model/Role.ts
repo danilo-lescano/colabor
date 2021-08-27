@@ -1,5 +1,5 @@
 export default interface Role {
-    id: number;
+    id: string;
     nome: string;
     description: string;
 }

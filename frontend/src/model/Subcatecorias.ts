@@ -1,5 +1,5 @@
 export default interface Subcategoria {
-	id: number;
-    idCategoria: number;
+	id: string;
+    idCategoria: string;
     nome: string;
 }
