@@ -1,7 +1,7 @@
 import Role from "./Role";
 
 export default interface Usuario {
-    id: number;
+    id: string;
     email: string;
     nome: string;
     role: Role[];
