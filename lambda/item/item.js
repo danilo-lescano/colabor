@@ -19,17 +19,17 @@ const mountResponse = (statusCode, data, message) => {
     const resp = {};
     if(data) resp.data = data;
     if(message) resp.message = message;
-    return {
+    callback(null, {
         statusCode: statusCode,
         headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(resp)
-    }
+    })
 }
 
 const createItem = async (data, callback) => {
-    //const token = await amILogged(data.tokenid);
-    //if(!token || token.role !== "admin")
-    //mountResponse(403, null, 'não autorizado', callback);
+    const token = await amILogged(data.tokenid);
+    if(!token || token.role !== "admin")
+    mountResponse(403, null, 'Não autorizado!', callback);
     
     mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
 
@@ -42,13 +42,26 @@ const updateItem = async (data, callback) => {
 };
 
 const getAllItems = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+    let params = { TableName: "item" };
+    try {
+        let resp = await db.scan(params).promise();
+        mountResponse(200, resp.Items, '', callback);
+    } catch(err) {
+        mountResponse(400, null, err, callback);
+    }
 };
 
 const getItem = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+    let params = {
+        TableName: "item",
+        Key: { id: data.id }
+    };
+    try {
+        let resp = await db.get(params).promise();
+        mountResponse(200, resp.Item, '', callback);
+    } catch(err) {
+        mountResponse(400, null, err, callback);
+    }
 };
 
 const deleteItem = async (data, callback) => {
