@@ -19,7 +19,7 @@ const mountResponse = (statusCode, data, message, callback) => {
     const resp = {};
     if(data) resp.data = data;
     if(message) resp.message = message;
-    callback({
+    callback(null, {
         statusCode: statusCode,
         headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(resp)
