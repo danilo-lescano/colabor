@@ -15,7 +15,7 @@ const amILogged = async (tokenid) => {
     return (await db.get(tokenparams).promise()).Item;
 };
 
-const mountResponse = (statusCode, data, message) => {
+const mountResponse = (statusCode, data, message, callback) => {
     const resp = {};
     if(data) resp.data = data;
     if(message) resp.message = message;
@@ -23,22 +23,58 @@ const mountResponse = (statusCode, data, message) => {
         statusCode: statusCode,
         headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(resp)
-    })
-}
-
-const createItem = async (data, callback) => {
-    const token = await amILogged(data.tokenid);
-    if(!token || token.role !== "admin")
-    mountResponse(403, null, 'Não autorizado!', callback);
-    
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-
-    //TO DO
+    });
 };
 
-const updateItem = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+const uploadImage = async (data, callback) => {
+    let token = await amILogged(data.tokenid);
+    let file = data.file;
+    if(!token || token.role !== "admin") {
+        mountResponse(403, null, 'Não autorizado!', callback);
+        return;
+    }
+    if(file) {
+        mountResponse(403, false, '', callback);
+        return;
+    }
+    let base64Data = new Buffer.from(file[0].replace(/^data:image\/\w+;base64,/, ""), 'base64');
+    let type = file[0].split(';')[0].split('/')[1];
+    let s3Params = {
+        Bucket: 'colabor-s3-image',
+        Key: `${Date.now()}-${Math.random().toString().replace('.', '')}.${type}`,
+        Body: base64Data,
+        ACL: 'public-read',
+        ContentEncoding: 'base64',
+        ContentType: `image/${type}`
+    };
+    try {
+        await s3.putObject(s3Params).promise();
+        mountResponse(200, 'https://colabor-s3-image.s3-sa-east-1.amazonaws.com/' + s3Params.Key, 'Imagem salva com sucesso', callback);
+    } catch (error) {
+        mountResponse(200, false, 'Erro ao salvar a imagem', callback);
+    }
+}
+
+const createOrUpdateItem = async (data, callback) => {
+    let token = await amILogged(data.tokenid);
+    if(!token || token.role !== "admin") {
+        mountResponse(403, null, 'Não autorizado!', callback);
+        return;
+    }
+    let item = data.item;
+    let params = {
+        TableName: "item",
+        Item: {
+            id: item.id ? item.id : Date.now().toString(),
+            ...item
+        }
+    };
+    try {
+        await db.put(params).promise();
+        mountResponse(200, true, 'Item criado com sucesso', callback);
+    } catch(err) {
+        mountResponse(200, false, 'Falha na criação do item', callback);
+    }
 };
 
 const getAllItems = async (data, callback) => {
@@ -65,8 +101,21 @@ const getItem = async (data, callback) => {
 };
 
 const deleteItem = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+    let token = await amILogged(data.tokenid);
+    if(!token || token.role !== "admin") {
+        mountResponse(403, false, 'Não autorizado!', callback);
+        return;
+    }
+    let params = {
+        TableName: "item",
+        Key: { id: data.id }
+    };
+    try {
+        await db.delete(params).promise();
+        mountResponse(200, true, 'Item deletado com sucesso', callback);
+    } catch(err) {
+        mountResponse(400, false, err, callback);
+    }
 };
 
 exports.handler = async (event, content, callback) => {
@@ -74,12 +123,12 @@ exports.handler = async (event, content, callback) => {
         getAllItems(event.data, callback);
     else if(event.operation === 'get')
         getItem(event.data, callback);
-    else if(event.operation === 'create')
-        createItem(event.data, callback);
-    else if(event.operation === 'update')
-        updateItem(event.data, callback);
+    else if(event.operation === 'create' || event.operation === 'update')
+        createOrUpdateItem(event.data, callback);
     else if(event.operation === 'delete')
         deleteItem(event.data, callback);
+    else if(event.operation === 'uploadimage')
+        uploadImage(event.data, callback);
     else
         mountResponse(400, null, 'operação não encontrada', callback);
 };
