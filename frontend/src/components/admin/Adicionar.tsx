@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getAllCategorias } from "../../api/categoriaAPI";
+import { GetCategorias } from "../../api/categoriaAPI";
 import GetItemLoja from "../../api/getItemLoja";
 import PutItemLoja from '../../api/putItemLoja';
 import Spinner from "../acessorios/Spinner";
@@ -80,7 +80,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
 
 
     const callGetAllCategorias = async () => {
-        const aux_categorias = await getAllCategorias({tokenid: session.id});
+        const aux_categorias = await GetCategorias({tokenid: session.id});
         if(aux_categorias) {
             setCategoriaTipos(aux_categorias);
         }

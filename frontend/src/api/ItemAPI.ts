@@ -1,32 +1,23 @@
-const GetItens = async () => {
-    return new Promise(function (resolve, reject) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "https://5im5aom4s4.execute-api.sa-east-1.amazonaws.com/final/item", true);
-        xhr.onload = async function () {
-            if (this.status >= 200 && this.status < 300) {
-                let resp = JSON.parse(xhr.response);  
-                if(xhr && xhr.response && resp){
-                    resolve(JSON.parse(resp.body));
-                }
-                else
-                    resolve(false);
-            } else {
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
-            }
-        };
-        xhr.onerror = function () {
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
-        };
+import API from "./API";
 
-        let data = {operation: 'getall'}
-        xhr.send(JSON.stringify(data));
-    });
+const GetItem = async (data?: any) => {
+    return await API('item', 'get', data);
 }
 
-export default GetItens;
+const GetItens = async (data?: any) => {
+    return await API('item', 'getall', data);
+}
+
+const CreateItem = async (data?: any) => {
+    return await API('item', 'create', data);
+}
+
+const UpdateItem = async (data?: any) => {
+    return await API('item', 'update', data);
+}
+
+const DeleteItem = async (data?: any) => {
+    return await API('item', 'delete', data);
+}
+
+export { GetItem, GetItens, CreateItem, UpdateItem, DeleteItem };

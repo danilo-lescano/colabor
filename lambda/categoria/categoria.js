@@ -23,7 +23,7 @@ const mountResponse = (statusCode, data, message, callback) => {
         headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(resp)
     });
-}
+};
 
 const createOrUpdateCategoria = async (data, callback) => {
     let token = await amILogged(data.tokenid);
@@ -92,13 +92,13 @@ const deleteCategoria = async (data, callback) => {
 
 exports.handler = async (event, content, callback) => {
     if(event.operation === 'getall')
-        getAllCategorias(event.data, callback);
+        await getAllCategorias(event.data, callback);
     else if(event.operation === 'get')
-        getCategoria(event.data, callback);
+        await getCategoria(event.data, callback);
     else if(event.operation === 'create')
-        createOrUpdateCategoria(event.data, callback);
+        await createOrUpdateCategoria(event.data, callback);
     else if(event.operation === 'delete')
-        deleteCategoria(event.data, callback);
+        await deleteCategoria(event.data, callback);
     else
         mountResponse(400, null, 'operação não encontrada', callback);
 };

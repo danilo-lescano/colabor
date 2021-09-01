@@ -122,15 +122,15 @@ const deleteItem = async (data, callback) => {
 
 exports.handler = async (event, content, callback) => {
     if(event.operation === 'getall')
-        getAllItems(event.data, callback);
+        await getAllItems(event.data, callback);
     else if(event.operation === 'get')
-        getItem(event.data, callback);
+        await getItem(event.data, callback);
     else if(event.operation === 'create' || event.operation === 'update')
-        createOrUpdateItem(event.data, callback);
+        await createOrUpdateItem(event.data, callback);
     else if(event.operation === 'delete')
-        deleteItem(event.data, callback);
+        await deleteItem(event.data, callback);
     else if(event.operation === 'uploadimage')
-        uploadImage(event.data, callback);
+        await uploadImage(event.data, callback);
     else
         mountResponse(400, null, 'operação não encontrada', callback);
 };
