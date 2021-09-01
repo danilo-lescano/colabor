@@ -3,7 +3,7 @@ import GetItensLoja from "../../api/getItensLoja";
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import DeleteItemLoja from "../../api/deleteItemLoja";
 import Spinner from "../acessorios/Spinner";
-import {createCategoria, deleteCategoria, getAllCategorias} from "../../api/categoriaAPI";
+import {GetCategoria, GetCategorias, CreateCategoria, UpdateCategoria, DeleteCategoria} from "../../api/categoriaAPI";
 
 const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}) {
 	const [session, setSession] = useState<any>(JSON.parse(localStorage.getItem('session') as string));
@@ -24,20 +24,23 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
     }, []);
 
     const callGetAllCategorias = async () => {
-        const aux_categorias = await getAllCategorias({tokenid: session.id});
+        const aux_categorias = await GetCategorias({tokenid: session.id});
+        console.log(aux_categorias)
         if(aux_categorias) {
             setCategorias(aux_categorias);
-            if(!novaSubCategoriaCategoria)
-                for(let i = 0; i < categorias.length; i++)
+            if(!novaSubCategoriaCategoria) {
+                for(let i = 0; i < categorias.length; i++) {
                     if(categorias[i] !== 'oferta') {
                         setNovaSubCategoriaCategoria(categorias[i].titulo)
                         break;
                     }
+                }
+            }
         }
     }
 
     const addCategoria = async () => {
-        await createCategoria({
+        await CreateCategoria({
             tokenid: session.id,
             data: {
                 titulo: novaCategoriaTitulo,
@@ -51,7 +54,7 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
         for(var i = 0; i < categorias.length; i++) {
             console.log(categorias[i].titulo, novaSubCategoriaCategoria, categorias[i].titulo === novaSubCategoriaCategoria)
             if(categorias[i].titulo === novaSubCategoriaCategoria) {
-                await createCategoria({
+                await CreateCategoria({
                     tokenid: session.id,
                     data: {
                         id: categorias[i].id,
@@ -69,7 +72,7 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
         for(var i = 0; i < categorias.length; i++) {
             if(categorias[i].titulo === ct) {
                 categorias[i].subCategorias.splice(categorias[i].subCategorias, 1);
-                await createCategoria({
+                await CreateCategoria({
                     tokenid: session.id,
                     data: {
                         id: categorias[i].id,
@@ -88,7 +91,7 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
 
         for(var i = 0; i < categorias.length; i++) {
             if(categorias[i].id === ctid) {
-                await deleteCategoria({
+                await DeleteCategoria({
                     tokenid: session.id,
                     data: {
                         id: ctid
@@ -102,7 +105,7 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
     const addOferta = async () => {
         for(var i = 0; i < categorias.length; i++) {
             if(categorias[i].titulo === 'oferta') {
-               await createCategoria({
+               await CreateCategoria({
                     tokenid: session.id,
                     data: {
                        id: categorias[i].id,

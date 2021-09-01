@@ -1,87 +1,24 @@
-const createCategoria = async (item: any) => {
-    return new Promise(function (resolve, reject) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("PUT", "https://5im5aom4s4.execute-api.sa-east-1.amazonaws.com/final/categoria", true);
-        xhr.onload = async function () {
-            if (this.status >= 200 && this.status < 300) {
-                let resp = await JSON.parse(xhr.response);  
-                if(xhr && xhr.response && resp)
-                    resolve(resp.data);
-                else
-                    resolve(false);
-            } else {
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
-            }
-        };
-        xhr.onerror = function () {
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
-        };
-        xhr.send(JSON.stringify({ ...item, operation: 'create'}));
-    });
+import API from "./API";
+
+const GetCategoria = async (data?: any) => {
+    return await API('categoria', 'get', data);
+}
+
+const GetCategorias = async (data?: any) => {
+    return await API('categoria', 'getall', data);
+}
+
+const CreateCategoria = async (data?: any) => {
+    return await API('categoria', 'create', data);
+}
+
+const UpdateCategoria = async (data?: any) => {
+    return await API('categoria', 'update', data);
+}
+
+const DeleteCategoria = async (data?: any) => {
+    return await API('categoria', 'delete', data);
 }
 
 
-const deleteCategoria = async (item: any) => {
-    return new Promise(function (resolve, reject) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("PUT", "https://5im5aom4s4.execute-api.sa-east-1.amazonaws.com/final/categoria", true);
-        xhr.onload = async function () {
-            if (this.status >= 200 && this.status < 300) {
-                let resp = await JSON.parse(xhr.response);  
-                if(xhr && xhr.response && resp)
-                    resolve(resp.data);
-                else
-                    resolve(false);
-            } else {
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
-            }
-        };
-        xhr.onerror = function () {
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
-        };
-        xhr.send(JSON.stringify({ ...item, operation: 'delete'}));
-    });
-}
-
-
-const getAllCategorias = async (item: any) => {
-    return new Promise(function (resolve, reject) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("PUT", "https://5im5aom4s4.execute-api.sa-east-1.amazonaws.com/final/categoria", true);
-        xhr.onload = async function () {
-            if (this.status >= 200 && this.status < 300) {
-                let resp = await JSON.parse(xhr.response);  
-                if(xhr && xhr.response && resp)
-                    resolve(resp.data);
-                else
-                    resolve(false);
-            } else {
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
-            }
-        };
-        xhr.onerror = function () {
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
-        };
-        xhr.send(JSON.stringify({ ...item, operation: 'getall'}));
-    });
-}
-
-export {createCategoria, getAllCategorias, deleteCategoria};
+export {GetCategoria, GetCategorias, CreateCategoria, UpdateCategoria, DeleteCategoria};

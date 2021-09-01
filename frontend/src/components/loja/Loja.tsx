@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom"
-import GetItens from "../../api/ItemAPI";
+import { GetItens } from "../../api/ItemAPI";
 import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
 import Subcategoria from "../../model/Subcatecorias";
@@ -17,7 +17,7 @@ const Loja = () => {
     }, []);
 
     const fetchData = async () => {
-        let resp: any = await GetItens();
+        let resp = await GetItens();
         console.log(resp)
         //categorias = await GetCategorias();
     };
