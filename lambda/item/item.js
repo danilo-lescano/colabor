@@ -62,6 +62,8 @@ const createOrUpdateItem = async (data, callback) => {
         return;
     }
     let item = data.item;
+    item.lastModification = Date.now();
+    item.autor = token.usuarioId;
     let params = {
         TableName: "item",
         Item: {

@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
 const db = new AWS.DynamoDB.DocumentClient({ region: 'sa-east-1' });
 
 AWS.config.update({ region: 'sa-east-1' });
@@ -26,34 +25,69 @@ const mountResponse = (statusCode, data, message, callback) => {
     });
 }
 
-const createCategoria = async (data, callback) => {
-    //const token = await amILogged(data.tokenid);
-    //if(!token || token.role !== "admin")
-    //mountResponse(403, null, 'não autorizado', callback);
-    
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-
-    //TO DO
-};
-
-const updateCategoria = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+const createOrUpdateCategoria = async (data, callback) => {
+    let token = await amILogged(data.tokenid);
+    if(!token || token.role !== "admin") {
+        mountResponse(403, null, 'Não autorizado!', callback);
+        return;
+    }
+    let item = data.item;
+    item.lastModification = Date.now();
+    item.autor = token.usuarioId;
+    let params = {
+        TableName: "categoria",
+        Item: {
+            id: item.id ? item.id : Date.now().toString(),
+            ...item
+        }
+    };
+    try {
+        await db.put(params).promise();
+        mountResponse(200, true, 'Item criado com sucesso', callback);
+    } catch(err) {
+        mountResponse(200, false, 'Falha na criação do item', callback);
+    }
 };
 
 const getAllCategorias = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+    let params = { TableName: "categoria" };
+    try {
+        let resp = await db.scan(params).promise();
+        mountResponse(200, resp.Items, '', callback);
+    } catch(err) {
+        mountResponse(400, null, err, callback);
+    }
 };
 
 const getCategoria = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+    let params = {
+        TableName: "categoria",
+        Key: { id: data.id }
+    };
+    try {
+        let resp = await db.get(params).promise();
+        mountResponse(200, resp.Item, '', callback);
+    } catch(err) {
+        mountResponse(400, null, err, callback);
+    }
 };
 
 const deleteCategoria = async (data, callback) => {
-    mountResponse(400, null, 'METHOD NOT IMPLEMENTED', callback);
-    //TO DO
+    let token = await amILogged(data.tokenid);
+    if(!token || token.role !== "admin") {
+        mountResponse(403, false, 'Não autorizado!', callback);
+        return;
+    }
+    let params = {
+        TableName: "categoria",
+        Key: { id: data.id }
+    };
+    try {
+        await db.delete(params).promise();
+        mountResponse(200, true, 'Categoria deletada com sucesso', callback);
+    } catch(err) {
+        mountResponse(400, false, err, callback);
+    }
 };
 
 exports.handler = async (event, content, callback) => {
@@ -62,9 +96,7 @@ exports.handler = async (event, content, callback) => {
     else if(event.operation === 'get')
         getCategoria(event.data, callback);
     else if(event.operation === 'create')
-        createCategoria(event.data, callback);
-    else if(event.operation === 'update')
-        updateCategoria(event.data, callback);
+        createOrUpdateCategoria(event.data, callback);
     else if(event.operation === 'delete')
         deleteCategoria(event.data, callback);
     else

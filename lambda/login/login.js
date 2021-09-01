@@ -25,8 +25,8 @@ exports.handler = async (event, content, callback) => {
         const data = await db.scan(params).promise();
         if(data.Items && data.Items.filter(i => i.email === event.email && i.senha === event.senha)) {
             const u = data.Items.filter(i => i.email === event.email && i.senha === event.senha)[0];
-            const t = await saveTokenLogin(u);
-            if(t)
+            const token = await saveTokenLogin(u);
+            if(token)
                 return callback({
                     statusCode: 200,
                     headers: {'Access-Control-Allow-Origin': '*'},
