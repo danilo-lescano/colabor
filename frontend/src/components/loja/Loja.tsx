@@ -58,7 +58,7 @@ const Loja = () => {
                         return <div className={'left-navbar-secao'}>
                             <div><span style={{backgroundColor: c.cor}}></span>{c.nome.toUpperCase()}</div>
                             {c.subcategorias?.map((sc)=>{
-                                return <div>{sc.nome}</div>
+                                return <div>{sc}</div>
                             })}
                         </div>
                     })}
@@ -77,7 +77,7 @@ const Loja = () => {
                                 <span className={'item-loja-span ' + renderMode}>
                                     <div className={'item-loja-nome-preco-minibox ' + renderMode}>
                                         <span>{i.nome}</span><br/>
-                                        <span style={{fontSize: '1.2em'}}>R$ {i.preco.toFixed(2)}</span>
+                                        <span style={{fontSize: '1.2em'}}>R$ {i.preco?.toFixed(2)}</span>
                                     </div>
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
                                         {i.subcategorias?.map((sc:Subcategoria)=>
