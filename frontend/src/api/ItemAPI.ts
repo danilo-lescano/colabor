@@ -1,7 +1,7 @@
 import API from "./API";
 
-const GetItem = async (data?: any) => {
-    return await API('item', 'get', data);
+const GetItem = async (id: string) => {
+    return await API('item', 'get', {id: id});
 }
 
 const GetItens = async (data?: any) => {

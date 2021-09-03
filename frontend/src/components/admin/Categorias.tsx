@@ -24,7 +24,7 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
     }, []);
 
     const callGetAllCategorias = async () => {
-        const aux_categorias = await GetCategorias({tokenid: session.id});
+        const aux_categorias = await GetCategorias();
         console.log(aux_categorias)
         if(aux_categorias) {
             setCategorias(aux_categorias);

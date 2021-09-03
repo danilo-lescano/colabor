@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react"
-import GetItensLoja from "../../api/getItensLoja";
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import DeleteItemLoja from "../../api/deleteItemLoja";
+import { GetItens } from "../../api/ItemAPI";
+import Item from "../../model/Item";
 import Spinner from "../acessorios/Spinner";
 
 const Listar = function (args:{update: (id:string)=>void, reRender?:Boolean}) {
 	const [session, setSession] = useState<any>(JSON.parse(localStorage.getItem('session') as string));
-    const [items, setItems] = useState<any>([]);
+    const [items, setItems] = useState<Item[]>([]);
     const [spinerFlag, setSpinnerFlag] = useState<any>({});
 
     const {update, reRender} = {...args};
 
     const getItems = async () => {
-        await GetItensLoja()
-        .then((items)=>{
-            setItems(items);
-        })
-        .catch((e)=>console.log(e))
-        return;
+        let aux: any = await GetItens();
+        setItems(aux.data as Item[]);
     };
+
     useEffect(()=>{
         getItems();
     }, [reRender])
@@ -26,7 +23,7 @@ const Listar = function (args:{update: (id:string)=>void, reRender?:Boolean}) {
     const deleteItem = async (id: string) => {
         spinerFlag[id] = true;
         setSpinnerFlag({...spinerFlag});
-        await DeleteItemLoja({id: id, tokenid: session.id});
+        //await DeleteItemLoja({id: id, tokenid: session.id});
         await getItems();
         spinerFlag[id] = false;
         setSpinnerFlag({...spinerFlag});

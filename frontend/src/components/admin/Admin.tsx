@@ -27,9 +27,16 @@ const Admin = function () {
                 </h1>
             </div>
 
-            <span className={tabAtiva !== 'Adicionar' ? none : ''}><Adicionar id={itemId} iAddCallback={reRender}/></span>
-            <span className={tabAtiva !== 'Listar' ? none : ''}><Listar update={updateItem} reRender={renderFlag}/></span>
-            <span className={tabAtiva !== 'Categorias' ? none : ''}><Categorias update={updateItem} reRender={renderFlag}/></span>
+            <span className={tabAtiva !== 'Adicionar' ? none : ''}>
+                <Adicionar id={itemId} iAddCallback={reRender}/>
+            </span>
+            <span className={tabAtiva !== 'Listar' ? none : ''}>
+                <Listar update={updateItem} reRender={renderFlag}/>
+            </span>
+            <span className={tabAtiva !== 'Categorias' ? none : ''}>
+                {/*<Categorias update={updateItem} reRender={renderFlag}/>*/}
+                <h1>categoria</h1>
+            </span>
         </>
     )
 }

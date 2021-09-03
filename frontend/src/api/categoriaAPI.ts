@@ -4,8 +4,8 @@ const GetCategoria = async (data?: any) => {
     return await API('categoria', 'get', data);
 }
 
-const GetCategorias = async (data?: any) => {
-    return await API('categoria', 'getall', data);
+const GetCategorias = async () => {
+    return await API('categoria', 'getall');
 }
 
 const CreateCategoria = async (data?: any) => {
