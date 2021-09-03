@@ -6,7 +6,7 @@ import Item from "../../model/Item";
 import Spinner from "../acessorios/Spinner";
 
 const SendItem = async function (args: any) {
-    await UpdateItem(args);
+    console.log(await UpdateItem(args.item));
     return;
 }
 
@@ -128,7 +128,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <input type={'hidden'} value={item.id}/>
                 <label>Nome do Produto</label><br/>
-                <input type={'text'} value={item.nome} onChange={(e)=>{item.nome=e.target.value; setItem(item)}}/><br/><br/>
+                <input type={'text'} value={item.nome} onChange={(e)=>{item.nome = e.target.value; setItem({...item})}}/><br/><br/>
                 <label>Preço</label><br/>
                 <input type={'text'} value={item.preco ? parseFloat(item.preco.toString()) : ''} onChange={(e) => {
                     let aux: any = parseFloat(e.target.value.replace(',', '.'));
@@ -137,20 +137,20 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                         return;
                     }
                     item.preco = aux;
-                    setItem(item);
+                    setItem({...item});
                 }}/><br/><br/>
                 <label>Descrição/Apresentação</label><br/>
-                <input type={'text'} value={item.descricao} onChange={(e)=>{item.descricao = e.target.value; setItem(item)}}/><br/><br/>
+                <input type={'text'} value={item.descricao} onChange={(e)=>{item.descricao = e.target.value; setItem({...item})}}/><br/><br/>
                 <label>Descrição Técnica</label><br/>
-                <input type={'text'} value={item.descricaoTecnica} onChange={(e)=>{item.descricaoTecnica = e.target.value; setItem(item)}}/><br/><br/>
+                <input type={'text'} value={item.descricaoTecnica} onChange={(e)=>{item.descricaoTecnica = e.target.value; setItem({...item})}}/><br/><br/>
                 <label>Peso (kg)</label><br/>
-                <input type={'text'} value={item.peso} onChange={(e)=>{item.peso = parseFloat(e.target.value); setItem(item)}}/><br/><br/>
+                <input type={'text'} value={item.peso} onChange={(e)=>{item.peso = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
                 <label>Altura (cm)</label><br/>
-                <input type={'text'} value={item.altura} onChange={(e)=>{item.altura = parseFloat(e.target.value); setItem(item)}}/><br/><br/>
+                <input type={'text'} value={item.altura} onChange={(e)=>{item.altura = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
                 <label>Largura (cm)</label><br/>
-                <input type={'text'} value={item.largura} onChange={(e)=>{item.largura = parseFloat(e.target.value); setItem(item)}}/><br/><br/>
+                <input type={'text'} value={item.largura} onChange={(e)=>{item.largura = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
                 <label>Profundidade (cm)</label><br/>
-                <input type={'text'} value={item.profundidade} onChange={(e)=>{item.profundidade = parseFloat(e.target.value); setItem(item)}}/><br/><br/>
+                <input type={'text'} value={item.profundidade} onChange={(e)=>{item.profundidade = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <div>Imagem Principal</div>
@@ -192,7 +192,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                     await SendItem({
                         tokenid: session.id,
                         operation: 'putItem',
-                        data:{ item }
+                        item: item
                     });
                     iAddCallback();
                 }catch(err){
