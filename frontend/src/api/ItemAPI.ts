@@ -23,4 +23,9 @@ const DeleteItem = async (data?: any) => {
     return await API('item', 'delete', data);
 }
 
-export { GetItem, GetItens, CreateItem, UpdateItem, DeleteItem };
+const UploadImage = async (file: any) => {
+    let tokenid = JSON.parse(localStorage.getItem('session') as string).id;
+    return await API('item', 'uploadimage', {tokenid: tokenid, file: file});
+}
+
+export { GetItem, GetItens, CreateItem, UpdateItem, DeleteItem, UploadImage };

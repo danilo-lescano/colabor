@@ -33,7 +33,7 @@ const uploadImage = async (data, callback) => {
         mountResponse(403, null, 'Não autorizado!', callback);
         return;
     }
-    if(file) {
+    if(!file) {
         mountResponse(403, false, '', callback);
         return;
     }

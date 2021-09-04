@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react"
 import { GetCategorias } from "../../api/categoriaAPI";
-import { GetItem, UpdateItem } from "../../api/ItemAPI";
+import { GetItem, UpdateItem, UploadImage } from "../../api/ItemAPI";
 import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
 import Spinner from "../acessorios/Spinner";
 
 const SendItem = async function (args: any) {
+    console.log(args.item)
     console.log(await UpdateItem(args.item));
     return;
 }
 
 const itemInitialState: Item = {
     id: '',
-    nome: ''
+    nome: '',
+    imagensCarrossel: ['','','','','',''],
+    imagensMosaico: ['','','','']
 };
 
 const Checkbox = function (values: {tag: string, onClick: (e:any)=>void, lista?:any}) {
@@ -24,7 +27,7 @@ const Checkbox = function (values: {tag: string, onClick: (e:any)=>void, lista?:
     )
 }
 
-const DropImage = function (values: {url?: string, onChange: (e:any, c:()=>void)=>void}) {
+const DropImage = function (values: {url: string, onChange: (url:string)=>void}) {
     const {url, onChange} = {...values};
     const [isDropover, setIsDropover] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +36,14 @@ const DropImage = function (values: {url?: string, onChange: (e:any, c:()=>void)
         e.preventDefault();
         if (e.dataTransfer.files.length) {
             setIsLoading(true);
-            await onChange(e.dataTransfer.files, ()=>setIsLoading(false));
+            let r = new FileReader();
+            r.onload = async ()=>{
+                let newurl: string = (await UploadImage([r.result]) as any).data as string;
+                console.log(newurl);
+                onChange(newurl);
+                setIsLoading(false);
+            }
+            r.readAsDataURL(e.dataTransfer.files[0]);
         }
     };
     
@@ -50,20 +60,19 @@ const DropImage = function (values: {url?: string, onChange: (e:any, c:()=>void)
 
 const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
     const {iAddCallback} = {...args};
-	const [session, setSession] = useState<any>(JSON.parse(localStorage.getItem('session') as string));
+	const [session] = useState<any>(JSON.parse(localStorage.getItem('session') as string));
     const [item, setItem] = useState<Item>(itemInitialState);
     const [categorias, setCategorias] = useState<Categoria[]>([]);
 
-    
     const [sendItesFlag, setSendItesFlag] = useState(false);
 
     useEffect(()=>{
         loadItem();
-    },[args])
+    },[args]);
 
     useEffect(()=>{
         getAllCategorias();
-    },[])
+    },[]);
 
     const getAllCategorias = async () => {
         const aux_categorias = await GetCategorias() as Categoria[];
@@ -72,7 +81,17 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
     }
     const loadItem = async () => {
         if(args && args.id) {
-            let aux = await GetItem(args.id);
+            let aux: Item = (await GetItem(args.id) as any).data as Item;
+            for(var i = 0; i < 6; ++i) {
+                if(!aux.imagensCarrossel) aux.imagensCarrossel = [];
+                aux.imagensCarrossel[i] = aux.imagensCarrossel[i] ? aux.imagensCarrossel[i] : '';
+            }
+            for(var i = 0; i < 4; ++i) {
+                if(!aux.imagensMosaico) aux.imagensMosaico = [];
+                aux.imagensMosaico[i] = aux.imagensMosaico[i] ? aux.imagensMosaico[i] : '';
+            }
+
+            setItem(aux);
         }
     };
 
@@ -85,19 +104,28 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             let r = new FileReader();
             r.onload = async ()=>{
                 arr[arr.length] = r.result;
-                await SendItem({
-                    tokenid: session.id,
-                    operation: 'putImagem',
-                    data:{imagemNome: inputId, imagem: arr}    
-                })
-                callback()
-                iAddCallback();
+                let url: any = await UploadImage(arr);
+                if(inputId === 'imagemPrincipal')
+                    item.imagemPrincipal = url.data as string;
+                else if(inputId.split('-')[0] === 'imagensCarrossel') {
+
+                   // item.imagensCarrossel = url.data as string;
+                }
+                else if(inputId === 'imagemIcone')
+                    item.imagemIcone = url.data as string;
+                //else if(inputId === 'imagemMosaico')
+                //    item.imagemMosaico = url.data as string;
+
+                setItem(item);
+
+                callback();
             }
             r.readAsDataURL(e[0]);
         }
         else
             callback()
     };
+
     const deleteImage = async (inputId: string) => {
         await SendItem({
             tokenid: session.id,
@@ -155,32 +183,50 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <div>Imagem Principal</div>
                 <span style={{position:'relative', display:'inline-block'}}>
-                    <DropImage url={item.imagemPrincipal} onChange={(e, c:()=>void)=>{updateImagem(e, c, 'imagemPrincipal')}}/>
-                    {item.imagemPrincipal && item.imagemPrincipal.length > 0 ? <span onClick={()=>deleteImage('imagemPrincipal')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
+                    <DropImage url={item.imagemPrincipal ? item.imagemPrincipal : ''} onChange={url=>{item.imagemPrincipal = url; setItem(item);}}/>
+                    {item.imagemPrincipal ? <span onClick={()=>deleteImage('imagemPrincipal')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                 </span><br/><br/>
                 <div>Imagens Carrosel</div>
-                {item.imagensCarrossel ? Object.values(item.imagensCarrossel).map((imageURL:any)=>{
+                {item.imagensCarrossel ? item.imagensCarrossel.map((imageURL, index)=>{
+                    console.log('carrossel' + imageURL + index)
                     return(
-                        <>
+                        <span key={'carrossel' + imageURL + index}>
                             <span style={{position:'relative', display:'inline-block'}}>
-                            <DropImage url={imageURL} onChange={(e, c:()=>void)=>{updateImagem(e, c, imageURL)}}/>
-                            <span onClick={()=>deleteImage(imageURL)} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span>
+                            <DropImage url={imageURL} onChange={url=>{
+                                if(item.imagensCarrossel){
+                                    for(let i = 0; i < item.imagensCarrossel.length; ++i)
+                                        if(i === index || item.imagensCarrossel[i] === "") {
+                                            item.imagensCarrossel[i] = url;
+                                            break;
+                                        }
+                                    console.log("aqui")
+                                }
+                                else if(!item.imagensCarrossel)
+                                    item.imagensCarrossel = [url];
+                                setItem({...item});
+                            }}/>
+                            {imageURL ? <span onClick={()=>deleteImage(imageURL)} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                             </span><div style={{width: 5, display: 'inline-block'}}></div>
-                        </>
+                            {index > 0 && index % 2 ? <br/> : null}
+                        </span>
                 )}) : null}
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <div>Imagem Icone</div>
                 <span style={{position:'relative', display:'inline-block'}}>
-                    <DropImage url={item.imagemIcone} onChange={(e, c:()=>void)=>{updateImagem(e, c, 'imagemIcone')}}/>
+                    <DropImage url={item.imagemIcone ? item.imagemIcone : ''} onChange={url=>{item.imagemIcone = url; setItem(item);}}/>
                     <span onClick={()=>deleteImage('imagemIcone')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span>
                 </span><br/><br/>
                 <div>Imagens Mosaico</div>
-                {item.imagensMosaico ? Object.values(item.imagensMosaico).map((imageURL:any)=>{
+                {item.imagensMosaico ? item.imagensMosaico.map((imageURL:any, index)=>{
                     return(
                         <>
                             <span style={{position:'relative', display:'inline-block'}}>
-                            <DropImage url={imageURL} onChange={(e, c:()=>void)=>{updateImagem(e, c, 'imagemMosaico1')}}/>
+                            <DropImage url={imageURL}onChange={url=>{
+                                if(item.imagensMosaico && item.imagensMosaico.length > index)
+                                    item.imagensMosaico[Math.min(item.imagensMosaico.length, index)] = url;
+                                setItem(item);
+                            }}/>
                             <span onClick={()=>deleteImage('imagemMosaico1')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span>
                             </span><div style={{width: 5, display: 'inline-block'}}></div>
                         </>
