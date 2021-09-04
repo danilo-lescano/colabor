@@ -31,8 +31,6 @@ const API = async (apiName: string, operation: string, data?: any) => {
 
         let dados:any;
         dados = data ? {operation: operation, data: data} : {operation: operation};
-        console.log(dados)
-        console.log(data)
         xhr.send(JSON.stringify(dados));
     });
 }
