@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import { GetItens } from "../../api/ItemAPI";
+import { DeleteItem, GetItens } from "../../api/ItemAPI";
 import Item from "../../model/Item";
 import Spinner from "../acessorios/Spinner";
 
@@ -23,7 +23,7 @@ const Listar = function (args:{update: (id:string)=>void, reRender?:Boolean}) {
     const deleteItem = async (id: string) => {
         spinerFlag[id] = true;
         setSpinnerFlag({...spinerFlag});
-        //await DeleteItemLoja({id: id, tokenid: session.id});
+        await DeleteItem(id);
         await getItems();
         spinerFlag[id] = false;
         setSpinnerFlag({...spinerFlag});

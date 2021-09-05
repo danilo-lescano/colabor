@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom"
+import { GetCategorias } from "../../api/categoriaAPI";
 import { GetItens } from "../../api/ItemAPI";
 import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
@@ -9,18 +10,24 @@ import Carrousel from "./Carrousel";
 
 const Loja = () => {
     const [itens, setItens] = useState<Item[]>([]);
-    const [categorias] = useState<Categoria[]>([]);
-    const [renderMode, setRenderMode] = useState('page-mode'); //useState('tuple-mode'); //useState('card-mode');
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+    const [renderMode, setRenderMode] = useState('card-mode'); // tuple-mode card-mode page-mode
 
     useEffect(()=>{
-        fetchData();
+        fetchItens();
+        fetchCategorias();
     }, []);
 
-    const fetchData = async () => {
+    const fetchItens = async () => {
         let resp : any = await GetItens();
         if(resp.data)
             setItens(resp.data as Item[])
-        //categorias = await GetCategorias();
+    };
+
+    const fetchCategorias = async () => {
+        let resp : any = await GetCategorias();
+        if(resp.data)
+            setCategorias(resp.data as Categoria[])
     };
 
     const getCor = (id: string)=>{
@@ -68,7 +75,6 @@ const Loja = () => {
                 
                 <div className={'itens-loja-box ' + renderMode}>
                     {itens.map((i)=>{
-                        console.log(i)
                         return (
                             <div className={'item-loja-card ' + renderMode}>
                                 <Link to={`/item/${i.id}`}>
