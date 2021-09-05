@@ -19,8 +19,9 @@ const UpdateItem = async (item: Item) => {
     return await API('item', 'update', {tokenid: tokenid, item: item});
 }
 
-const DeleteItem = async (data?: any) => {
-    return await API('item', 'delete', data);
+const DeleteItem = async (id: any) => {
+    let tokenid = JSON.parse(localStorage.getItem('session') as string).id;
+    return await API('item', 'delete', {tokenid: tokenid, id: id});
 }
 
 const UploadImage = async (file: any) => {
