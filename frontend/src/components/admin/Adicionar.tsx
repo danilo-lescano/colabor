@@ -34,6 +34,7 @@ const DropImage = function (values: {url: string, onChange: (url:string)=>void})
 
     const onDrop = async (e: any) => {
         e.preventDefault();
+        setIsDropover(false);
         if (e.dataTransfer.files.length) {
             setIsLoading(true);
             let r = new FileReader();
@@ -48,12 +49,16 @@ const DropImage = function (values: {url: string, onChange: (url:string)=>void})
     };
     
     return (
-        <div style={{display:'inline-block', width: 100, height: 100, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative', overflow: 'hidden'}} onDragOver={(e)=>{e.preventDefault(); setIsDropover(true)}} onDragEnd={()=>setIsDropover(false)} onDragLeave={()=>setIsDropover(false)} onDrop={(e)=>onDrop(e)}>
+        <div style={{display:'inline-block', width: 100, height: 100, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative', overflow: 'hidden'}}>
             {url && url.length > 0 ? <img style={{width:'100%', left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}} src={url}/> :
             <div style={{border: isDropover ? 'solid 3px black' : 'dotted 3px black', width: 80, height: 80, left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}}>
                 <span style={{left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)', fontWeight: 'bold', fontSize: '2em'}}>+</span>
             </div>}
             {isLoading ? <div style={{width: 100, height: 100, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative'}}><span style={{left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}}><Spinner/></span></div>: null}
+            <div style={{position: 'absolute', top: 0, left: 0, width: 100, height: 100}}
+                onDragOver={(e)=>{setIsDropover(true); e.preventDefault();}}
+                onDragLeave={()=>{setIsDropover(false);}}
+                onDrop={(e)=>onDrop(e)}></div>
         </div>
     )
 };
@@ -183,29 +188,27 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <div>Imagem Principal</div>
                 <span style={{position:'relative', display:'inline-block'}}>
-                    <DropImage url={item.imagemPrincipal ? item.imagemPrincipal : ''} onChange={url=>{item.imagemPrincipal = url; setItem(item);}}/>
+                    <DropImage url={item.imagemPrincipal ? item.imagemPrincipal : ''} onChange={url=>{item.imagemPrincipal = url; setItem({...item});}}/>
                     {item.imagemPrincipal ? <span onClick={()=>deleteImage('imagemPrincipal')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                 </span><br/><br/>
                 <div>Imagens Carrosel</div>
                 {item.imagensCarrossel ? item.imagensCarrossel.map((imageURL, index)=>{
-                    console.log('carrossel' + imageURL + index)
                     return(
                         <span key={'carrossel' + imageURL + index}>
                             <span style={{position:'relative', display:'inline-block'}}>
-                            <DropImage url={imageURL} onChange={url=>{
-                                if(item.imagensCarrossel){
-                                    for(let i = 0; i < item.imagensCarrossel.length; ++i)
-                                        if(i === index || item.imagensCarrossel[i] === "") {
-                                            item.imagensCarrossel[i] = url;
-                                            break;
-                                        }
-                                    console.log("aqui")
-                                }
-                                else if(!item.imagensCarrossel)
-                                    item.imagensCarrossel = [url];
-                                setItem({...item});
-                            }}/>
-                            {imageURL ? <span onClick={()=>deleteImage(imageURL)} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
+                                <DropImage url={imageURL} onChange={url=>{
+                                    if(item.imagensCarrossel){
+                                        for(let i = 0; i < item.imagensCarrossel.length; ++i)
+                                            if(i === index || item.imagensCarrossel[i] === "") {
+                                                item.imagensCarrossel[i] = url;
+                                                break;
+                                            }
+                                    }
+                                    else if(!item.imagensCarrossel)
+                                        item.imagensCarrossel = [url];
+                                    setItem({...item});
+                                }}/>
+                                {imageURL ? <span onClick={()=>deleteImage(imageURL)} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                             </span><div style={{width: 5, display: 'inline-block'}}></div>
                             {index > 0 && index % 2 ? <br/> : null}
                         </span>
@@ -214,22 +217,31 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <div>Imagem Icone</div>
                 <span style={{position:'relative', display:'inline-block'}}>
-                    <DropImage url={item.imagemIcone ? item.imagemIcone : ''} onChange={url=>{item.imagemIcone = url; setItem(item);}}/>
-                    <span onClick={()=>deleteImage('imagemIcone')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span>
+                    <DropImage url={item.imagemIcone ? item.imagemIcone : ''} onChange={url=>{item.imagemIcone = url; setItem({...item});}}/>
+                    {item.imagemIcone ? <span onClick={()=>deleteImage('imagemIcone')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                 </span><br/><br/>
                 <div>Imagens Mosaico</div>
-                {item.imagensMosaico ? item.imagensMosaico.map((imageURL:any, index)=>{
+                {item.imagensMosaico ? item.imagensMosaico.map((imageURL, index)=>{
                     return(
-                        <>
+                        <span key={'mosaico' + imageURL + index}>
                             <span style={{position:'relative', display:'inline-block'}}>
-                            <DropImage url={imageURL}onChange={url=>{
-                                if(item.imagensMosaico && item.imagensMosaico.length > index)
-                                    item.imagensMosaico[Math.min(item.imagensMosaico.length, index)] = url;
-                                setItem(item);
-                            }}/>
-                            <span onClick={()=>deleteImage('imagemMosaico1')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span>
+                                <DropImage url={imageURL} onChange={url=>{
+                                    if(item.imagensMosaico){
+                                        for(let i = 0; i < item.imagensMosaico.length; ++i)
+                                            if(i === index || item.imagensMosaico[i] === "") {
+                                                item.imagensMosaico[i] = url;
+                                                break;
+                                            }
+                                        console.log("aqui")
+                                    }
+                                    else if(!item.imagensMosaico)
+                                        item.imagensMosaico = [url];
+                                    setItem({...item});
+                                }}/>
+                                {imageURL ? <span onClick={()=>deleteImage(imageURL)} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                             </span><div style={{width: 5, display: 'inline-block'}}></div>
-                        </>
+                            {index > 0 && index % 2 ? <br/> : null}
+                        </span>
                 )}) : null}
             </div><br/>
             <button disabled={sendItesFlag} onClick={async()=>{

@@ -8,7 +8,7 @@ import Subcategoria from "../../model/Subcatecorias";
 import Carrousel from "./Carrousel";
 
 const Loja = () => {
-    const [itens] = useState<Item[]>([]);
+    const [itens, setItens] = useState<Item[]>([]);
     const [categorias] = useState<Categoria[]>([]);
     const [renderMode, setRenderMode] = useState('page-mode'); //useState('tuple-mode'); //useState('card-mode');
 
@@ -17,8 +17,9 @@ const Loja = () => {
     }, []);
 
     const fetchData = async () => {
-        let resp = await GetItens();
-        console.log(resp)
+        let resp : any = await GetItens();
+        if(resp.data)
+            setItens(resp.data as Item[])
         //categorias = await GetCategorias();
     };
 
@@ -67,6 +68,7 @@ const Loja = () => {
                 
                 <div className={'itens-loja-box ' + renderMode}>
                     {itens.map((i)=>{
+                        console.log(i)
                         return (
                             <div className={'item-loja-card ' + renderMode}>
                                 <Link to={`/item/${i.id}`}>
@@ -80,12 +82,10 @@ const Loja = () => {
                                         <span style={{fontSize: '1.2em'}}>R$ {i.preco?.toFixed(2)}</span>
                                     </div>
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
-                                        {i.subcategorias?.map((sc:Subcategoria)=>
-                                            <>
-                                                <span className={'item-loja-tag ' + renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: getCor(sc.idCategoria)}}><span className={'item-loja-tag-text ' + renderMode}>{getNome(sc.idCategoria)}</span></span>
-                                                <span className={'item-loja-tag ' + renderMode + ' '}><span className={'item-loja-tag-text ' + renderMode}>{sc.nome}</span></span>
-                                            </>
-                                        )}
+                                        {i.subcategorias ? <>
+                                            <span className={'item-loja-tag ' + renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: getCor(i.subcategorias.idCategoria)}}><span className={'item-loja-tag-text ' + renderMode}>{getNome(i.subcategorias.idCategoria)}</span></span>
+                                            <span className={'item-loja-tag ' + renderMode + ' '}><span className={'item-loja-tag-text ' + renderMode}>{i.subcategorias.nome}</span></span>
+                                        </> : null}
                                     </div>
                                 </span>
                             </div>
