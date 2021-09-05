@@ -34,8 +34,7 @@ const Admin = function () {
                 <Listar update={updateItem} reRender={renderFlag}/>
             </span>
             <span className={tabAtiva !== 'Categorias' ? none : ''}>
-                {/*<Categorias update={updateItem} reRender={renderFlag}/>*/}
-                <h1>categoria</h1>
+                <Categorias update={updateItem} reRender={renderFlag}/>
             </span>
         </>
     )

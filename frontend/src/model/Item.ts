@@ -14,7 +14,11 @@ export default interface Item {
     imagemIcone?: string;
     imagensCarrossel?: string[];
     imagensMosaico?: string[];
-    subcategorias?: Subcategoria[];
+    subcategorias?: Subcategoria;
+    freteGratis?: boolean;
+    promocao?: number;
     lastModification?: number;
+    fixarNoInicio?: boolean;
+    quatidade?: number;
     autor?: string;
 }
