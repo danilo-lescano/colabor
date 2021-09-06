@@ -31,21 +31,21 @@ const createOrUpdateCategoria = async (data, callback) => {
         mountResponse(403, null, 'Não autorizado!', callback);
         return;
     }
-    let item = data.item;
-    item.lastModification = Date.now();
-    item.autor = token.usuarioId;
+    let categoria = data.categoria;
+    categoria.lastModification = Date.now();
+    categoria.autor = token.usuarioId;
+    categoria.id = categoria.id ? categoria.id : Date.now().toString();
     let params = {
         TableName: "categoria",
         Item: {
-            id: item.id ? item.id : Date.now().toString(),
-            ...item
+            ...categoria
         }
     };
     try {
         await db.put(params).promise();
-        mountResponse(200, true, 'Item criado com sucesso', callback);
+        mountResponse(200, true, 'Categoria criada com sucesso', callback);
     } catch(err) {
-        mountResponse(200, false, 'Falha na criação do item', callback);
+        mountResponse(200, false, 'Falha na criação da categoria', callback);
     }
 };
 
@@ -95,7 +95,7 @@ exports.handler = async (event, content, callback) => {
         await getAllCategorias(event.data, callback);
     else if(event.operation === 'get')
         await getCategoria(event.data, callback);
-    else if(event.operation === 'create')
+    else if(event.operation === 'create' || event.operation === 'update')
         await createOrUpdateCategoria(event.data, callback);
     else if(event.operation === 'delete')
         await deleteCategoria(event.data, callback);
