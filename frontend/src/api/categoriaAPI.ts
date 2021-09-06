@@ -1,3 +1,4 @@
+import Categoria from "../model/Categoria";
 import API from "./API";
 
 const GetCategoria = async (data?: any) => {
@@ -8,16 +9,19 @@ const GetCategorias = async () => {
     return await API('categoria', 'getall');
 }
 
-const CreateCategoria = async (data?: any) => {
-    return await API('categoria', 'create', data);
+const CreateCategoria = async (categoria: Categoria) => {
+    let tokenid = JSON.parse(localStorage.getItem('session') as string).id;
+    return await API('categoria', 'create', {tokenid: tokenid, categoria: categoria});
 }
 
-const UpdateCategoria = async (data?: any) => {
-    return await API('categoria', 'update', data);
+const UpdateCategoria = async (categoria: Categoria) => {
+    let tokenid = JSON.parse(localStorage.getItem('session') as string).id;
+    return await API('categoria', 'update', {tokenid: tokenid, categoria: categoria});
 }
 
-const DeleteCategoria = async (data?: any) => {
-    return await API('categoria', 'delete', data);
+const DeleteCategoria = async (id: string) => {
+    let tokenid = JSON.parse(localStorage.getItem('session') as string).id;
+    return await API('categoria', 'delete', {tokenid: tokenid, id: id});
 }
 
 
