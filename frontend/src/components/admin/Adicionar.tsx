@@ -18,12 +18,12 @@ const itemInitialState: Item = {
     imagensMosaico: ['','','','']
 };
 
-const Checkbox = function (values: {tag: string, onClick: (e:any)=>void, lista?:any}) {
-    const {tag, onClick, lista} = {...values}
+const Checkbox = function (values: {tag: string, onClick: (e:any)=>void}) {
+    const {tag, onClick} = {...values}
     const [flag, setFlag] = useState(false);
     const updateOnChange = ()=>setFlag(!flag);
     return (
-        <label key={tag+"-checkbox"}><input type={'checkbox'} name={tag} onClick={(e)=>{onClick(e as any); updateOnChange();}} checked={lista.includes(tag)}/>{tag}</label>
+        <label key={tag+"-checkbox"}><input type={'radio'} name={'categoria-radio'} value={tag} onClick={(e)=>{onClick(e as any); updateOnChange();}}/>{tag}</label>
     )
 }
 
@@ -80,9 +80,9 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
     },[]);
 
     const getAllCategorias = async () => {
-        const aux_categorias = await GetCategorias() as Categoria[];
+        const aux_categorias: any = await GetCategorias();
         if(aux_categorias)
-            setCategorias(aux_categorias);
+            setCategorias(aux_categorias.data as Categoria[]);
     }
     const loadItem = async () => {
         if(args && args.id) {
@@ -100,35 +100,15 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
         }
     };
 
-    const addCategoria = (e: any) => {
-    };
-
-    const updateImagem = async (e: any, callback:()=>void, inputId: string) => {
-        let arr = [] as any[];
-        if(e.length > 0) {
-            let r = new FileReader();
-            r.onload = async ()=>{
-                arr[arr.length] = r.result;
-                let url: any = await UploadImage(arr);
-                if(inputId === 'imagemPrincipal')
-                    item.imagemPrincipal = url.data as string;
-                else if(inputId.split('-')[0] === 'imagensCarrossel') {
-
-                   // item.imagensCarrossel = url.data as string;
-                }
-                else if(inputId === 'imagemIcone')
-                    item.imagemIcone = url.data as string;
-                //else if(inputId === 'imagemMosaico')
-                //    item.imagemMosaico = url.data as string;
-
-                setItem(item);
-
-                callback();
+    const addCategoria = (categoriaId: string, subcategoria: string) => {
+        if(item) {
+            item.subcategorias = {
+                idCategoria: categoriaId,
+                nome: subcategoria
             }
-            r.readAsDataURL(e[0]);
         }
-        else
-            callback()
+        console.log(item.subcategorias)
+        setItem({...item});
     };
 
     const deleteImage = async (inputId: string) => {
@@ -151,7 +131,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                         <b>{c.nome}</b><br/>
                         {c.subcategorias ? Object.values(c.subcategorias).map((sc:any)=>{
                             return (<>
-                                <Checkbox tag={sc} onClick={(e: any) => addCategoria(e)} lista={categorias}/><br/>
+                                <Checkbox tag={sc} onClick={(e: any) => addCategoria(c.id, e.target.value)}/><br/>
                             </>);
                         }) : null}
                         <br/>

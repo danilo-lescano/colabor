@@ -20,8 +20,10 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
 
     const getAllCategorias = async () => {
         const aux_categorias : any = await GetCategorias();
-        if(aux_categorias.data)
+        if(aux_categorias.data) {
             setCategorias(aux_categorias.data as Categoria[]);
+            setNovaSubcategoriaIdCategoria(aux_categorias.data[0].id);
+        }
     }
 
     const addCategoria = async () => {
@@ -36,7 +38,10 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
     };
     const addSubCategoria = async () => {
         let c = categorias.find((c)=>c.id === novaSubcategoriaIdCategoria);
-        if(c && c.subcategorias) {
+        console.log(c)
+        console.log(novaSubcategoriaNome, novaSubcategoriaIdCategoria)
+        if(c) {
+            if(!c.subcategorias) c.subcategorias = [];
             c.subcategorias.push(novaSubcategoriaNome);
             let resp = await UpdateCategoria(c);
             console.log(resp);
@@ -88,7 +93,7 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
                 <h3>Nova subcategoria</h3>
                 <label>Nome<br/><input type='text' onChange={(e)=>setNovaSubcategoriaNome(e.target.value)}/></label><br/><br/>
                 <label>Categoria<br/>
-                    <select onChange={(e)=>setNovaSubcategoriaIdCategoria(e.target.value)}>
+                    <select value={novaSubcategoriaIdCategoria} onChange={(e)=>setNovaSubcategoriaIdCategoria(e.target.value)}>
                         {Object.values(categorias).map((c)=><option value={c.id}>{c.nome}</option>)}
                     </select>
                 </label><br/>
