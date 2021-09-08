@@ -102,12 +102,12 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
 
     const addCategoria = (categoriaId: string, subcategoria: string) => {
         if(item) {
-            item.subcategorias = {
+            item.subcategoria = {
                 idCategoria: categoriaId,
                 nome: subcategoria
             }
         }
-        console.log(item.subcategorias)
+        console.log(item)
         setItem({...item});
     };
 
@@ -164,6 +164,16 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                 <input type={'text'} value={item.largura} onChange={(e)=>{item.largura = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
                 <label>Profundidade (cm)</label><br/>
                 <input type={'text'} value={item.profundidade} onChange={(e)=>{item.profundidade = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
+            </div>
+            <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
+                <label>Promoção %</label><br/>
+                <input type={'text'} value={item.promocaoPorcentagem} onChange={(e)=>{item.promocaoPorcentagem = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
+                <label>Promoção fixa</label><br/>
+                <input type={'text'} value={item.promocaoFixa} onChange={(e)=>{item.promocaoFixa = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
+                <label>Quantidade</label><br/>
+                <input type={'text'} value={item.quantidade} onChange={(e)=>{item.quantidade = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
+                <label><input type='checkbox' checked={item.freteGratis} onClick={()=>{item.freteGratis = !item.freteGratis; setItem({...item})}}/> Frete Grátis</label><br/><br/>
+                <label><input type='checkbox' checked={item.fixarNoInicio} onClick={()=>{item.fixarNoInicio = !item.fixarNoInicio; setItem({...item})}}/> Fixar no inicio</label><br/><br/>
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <div>Imagem Principal</div>
