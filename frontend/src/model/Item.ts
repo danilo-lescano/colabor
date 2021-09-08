@@ -14,11 +14,12 @@ export default interface Item {
     imagemIcone?: string;
     imagensCarrossel?: string[];
     imagensMosaico?: string[];
-    subcategorias?: Subcategoria;
+    subcategoria?: Subcategoria;
     freteGratis?: boolean;
-    promocao?: number;
-    lastModification?: number;
+    promocaoPorcentagem?: number;
+    promocaoFixa?: number;
     fixarNoInicio?: boolean;
-    quatidade?: number;
+    quantidade?: number;
+    lastModification?: number;
     autor?: string;
 }

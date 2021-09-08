@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom"
-import GetItemLoja from "../../api/getItemLoja";
+import { GetItem } from "../../api/ItemAPI";
+import Item from "../../model/Item";
 
 
 const CarrouselButtons = (props:{numDots: number, indexCurentImage: number, updateDotBtn: (n: number)=>void}) => {
@@ -21,7 +22,7 @@ const CarrouselButtons = (props:{numDots: number, indexCurentImage: number, upda
 }
 
 
-const Carrousel = (values: {imgs: string[]}) => {
+const Carrousel = (values: {imgs: string[] | undefined}) => {
     const {imgs} = {...values}
     const updateDot = () => {
         setIndexCurentImage((indexCurentImage+1)%carrouselImages.length);
@@ -31,18 +32,19 @@ const Carrousel = (values: {imgs: string[]}) => {
         setIndexCurentImage(index);
     }
 
-    const [carrouselImages, setCarrouselImages] = useState(imgs);
+    const [carrouselImages, setCarrouselImages] = useState(imgs ? imgs : []);
     const [indexCurentImage, setIndexCurentImage] = useState(0);
     const [timeoutCarrousel] = useState<ReturnType<typeof setTimeout>[]>([]);
 
     useEffect(()=>{
-        setCarrouselImages(imgs);
+        if(imgs)
+            setCarrouselImages(imgs);
     }, [imgs]);
     useEffect(()=>{
         timeoutCarrousel.map(t => clearTimeout(t));
         timeoutCarrousel.push(setTimeout(()=>updateDot(), 7000));
     }, [indexCurentImage, carrouselImages]);
-    if(imgs.length === 0) return <span></span>;
+    if(!imgs || imgs.length === 0) return <span></span>;
 
     return (
         <div className={'carrousel-box'}>
@@ -59,41 +61,19 @@ const Carrousel = (values: {imgs: string[]}) => {
 }
 
 
-const Item = () => {
+const ItemPage = () => {
     const {lojaitemId} = useParams<any>();
-    const [item, setItem] = useState<any>();
+    const [item, setItem] = useState<Item>({id: '', nome: ''});
 
     useEffect(()=>{
-        GetItemLoja(lojaitemId)
-        .then((resp:any)=>{
-            resp.nome = resp.nome ? resp.nome : '';
-            resp.preco = resp.preco ? parseFloat(resp.preco) : 0;
-            resp.descricao = resp.descricao ? resp.descricao : '';
-            resp.descricaoTecnica = resp.descricaoTecnica ? resp.descricaoTecnica : '';
-            resp.peso = resp.peso ? resp.peso : '';
-            resp.altura = resp.altura ? resp.altura : '';
-            resp.largura = resp.largura ? resp.largura : '';
-            resp.profundidade = resp.profundidade ? resp.profundidade : '';
-            resp.imagemPrincipal = resp.imagemPrincipal ? resp.imagemPrincipal : [];
-            resp.imagensCarrossel = [];
-            resp.imagensMosaico = [];
-            resp.imagemIcone = resp.imagemIcone ? resp.imagemIcone : [];
-            resp.categorias = resp.categorias ? resp.categorias : [];
-
-            if(resp.imagemCarrossel1) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel1);
-            if(resp.imagemCarrossel2) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel2);
-            if(resp.imagemCarrossel3) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel3);
-            if(resp.imagemCarrossel4) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel4);
-            if(resp.imagemCarrossel5) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel5);
-            if(resp.imagemCarrossel6) resp.imagensCarrossel = resp.imagensCarrossel.concat(resp.imagemCarrossel6);
-
-            if(resp.imagemMosaico1) resp.imagensMosaico = resp.imagensMosaico.concat(resp.imagemMosaico1);
-            if(resp.imagemMosaico2) resp.imagensMosaico = resp.imagensMosaico.concat(resp.imagemMosaico2);
-            if(resp.imagemMosaico3) resp.imagensMosaico = resp.imagensMosaico.concat(resp.imagemMosaico3);
-            setItem(resp);
-            console.log(item)
-        });
+        getItem();
     },[])
+
+    const getItem = async () => {
+        let resp: any = await GetItem(lojaitemId);
+        if(resp && resp.data)
+            setItem(resp.data as Item);
+    }
 
     return (
         item ? <>
@@ -104,35 +84,35 @@ const Item = () => {
                     <div className={'item-loja-main-section-left-title'}>{item.nome}</div>
                     <div className={'item-loja-main-section-left-subtitle'}>Produto <span>Coletivo Labor</span></div>
                     <div className={'item-loja-main-section-left-tags-minibox'}>
-                        {Object.values(item.categorias).map((c:any) =>
+                        {item.subcategoria ? Object.values(item.subcategoria).map((c:any) =>
                             <span className={'item-loja-main-section-left-tag'}><span className={'item-loja-main-section-left-tag-text'}>{c}</span></span>
-                        )}
+                        ) : null}
                     </div>
                     <div style={{textAlign: 'justify'}}>{item.descricao}</div>
                 </div>
                 <div className={'item-loja-main-section-right'}>
                     <div>
-                        <div className={'item-loja-main-section-right-preco'}>R$ {item.preco.toFixed(2)}</div>
-                        <div className={'item-loja-main-section-right-preco-parcela'}>ou em <span>10x {(item.preco/10).toFixed(2)}</span></div>
+                        <div className={'item-loja-main-section-right-preco'}>R$ {item.preco?.toFixed(2)}</div>
+                        <div className={'item-loja-main-section-right-preco-parcela'}>ou em <span>10x {(item.preco ? item.preco : 0/10).toFixed(2)}</span></div>
                         <span className={'item-loja-main-section-left-tag big'}><span className={'item-loja-main-section-left-tag-text'}>COMPRAR!</span></span>
                     </div>
                 </div>
             </div>
             <div className={'item-loja-mosaico-box'}>
                 <div className={'item-loja-mosaico-box-column one'}>
-                    {item.imagensMosaico[0] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[0]}/> : null}
+                    {item.imagensMosaico && item.imagensMosaico[0] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[0]}/> : null}
                 </div>
                 <div className={'item-loja-mosaico-box-column two'}>
-                    {item.imagensMosaico[1] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[1]}/> : null}
-                    {item.imagensMosaico[2] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[2]}/> : null}
+                    {item.imagensMosaico && item.imagensMosaico[1] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[1]}/> : null}
+                    {item.imagensMosaico && item.imagensMosaico[2] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[2]}/> : null}
                 </div>
             </div>
             <div className={'item-loja-descricao-box'}>
-                {item.imagemIcone[0] ? <img src={item.imagemIcone[0]}/> : null}
+                {item.imagemIcone ? <img src={item.imagemIcone}/> : null}
                 {item.descricaoTecnica ? <div><span>Descrição<br/><br/></span>{item.descricaoTecnica}</div> : null}
             </div>
         </> : null
     )
 }
 
-export default Item;
+export default ItemPage;

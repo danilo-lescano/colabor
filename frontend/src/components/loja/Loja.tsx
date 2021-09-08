@@ -88,9 +88,9 @@ const Loja = () => {
                                         <span style={{fontSize: '1.2em'}}>R$ {i.preco?.toFixed(2)}</span>
                                     </div>
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
-                                        {i.subcategorias ? <>
-                                            <span className={'item-loja-tag ' + renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: getCor(i.subcategorias.idCategoria)}}><span className={'item-loja-tag-text ' + renderMode}>{getNome(i.subcategorias.idCategoria)}</span></span>
-                                            <span className={'item-loja-tag ' + renderMode + ' '}><span className={'item-loja-tag-text ' + renderMode}>{i.subcategorias.nome}</span></span>
+                                        {i.subcategoria ? <>
+                                            <span className={'item-loja-tag ' + renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: getCor(i.subcategoria.idCategoria)}}><span className={'item-loja-tag-text ' + renderMode}>{getNome(i.subcategoria.idCategoria)}</span></span>
+                                            <span className={'item-loja-tag ' + renderMode + ' '}><span className={'item-loja-tag-text ' + renderMode}>{i.subcategoria.nome}</span></span>
                                         </> : null}
                                     </div>
                                 </span>
