@@ -19,10 +19,14 @@ const Categorias = function (args:{update: (id:string)=>void, reRender?:Boolean}
     }, []);
 
     const getAllCategorias = async () => {
-        const aux_categorias : any = await GetCategorias();
-        if(aux_categorias.data) {
-            setCategorias(aux_categorias.data as Categoria[]);
-            setNovaSubcategoriaIdCategoria(aux_categorias.data[0].id);
+        const resp : any = await GetCategorias();
+        const aux_categorias = (resp && resp.data ? resp.data : []) as Categoria[];
+        if(aux_categorias.length > 0) {
+            setCategorias(aux_categorias);
+            setNovaSubcategoriaIdCategoria(aux_categorias[0].id);
+        } else {
+            setCategorias([]);
+            setNovaSubcategoriaIdCategoria('');
         }
     }
 

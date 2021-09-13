@@ -18,12 +18,12 @@ const itemInitialState: Item = {
     imagensMosaico: ['','','','']
 };
 
-const Checkbox = function (values: {tag: string, onClick: (e:any)=>void}) {
-    const {tag, onClick} = {...values}
+const Checkbox = function (values: {tag: string, onClick: (e:any)=>void, checked: boolean}) {
+    const {tag, onClick, checked} = {...values}
     const [flag, setFlag] = useState(false);
     const updateOnChange = ()=>setFlag(!flag);
     return (
-        <label key={tag+"-checkbox"}><input type={'radio'} name={'categoria-radio'} value={tag} onClick={(e)=>{onClick(e as any); updateOnChange();}}/>{tag}</label>
+        <label key={tag+"-checkbox"}><input type={'radio'} name={'categoria-radio'} value={tag} onClick={(e)=>{onClick(e as any); updateOnChange();}} checked={checked}/>{tag}</label>
     )
 }
 
@@ -131,7 +131,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                         <b>{c.nome}</b><br/>
                         {c.subcategorias ? Object.values(c.subcategorias).map((sc:any)=>{
                             return (<>
-                                <Checkbox tag={sc} onClick={(e: any) => addCategoria(c.id, e.target.value)}/><br/>
+                                <Checkbox tag={sc} onClick={(e: any) => addCategoria(c.id, e.target.value)} checked={item.subcategoria?.idCategoria === c.id && item.subcategoria?.nome === sc}/><br/>
                             </>);
                         }) : null}
                         <br/>
