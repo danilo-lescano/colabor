@@ -1,34 +1,41 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Item from "../../model/Item";
 
 
-const getCarrouselImages = () => {
-    return [
-        {
-            src: 'https://wallpaperaccess.com/full/124573.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://hdwallpaperim.com/wp-content/uploads/2017/08/22/435641-ultra-wide-space.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://wallpaperaccess.com/full/124573.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://hdwallpaperim.com/wp-content/uploads/2017/08/22/435641-ultra-wide-space.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://wallpaperaccess.com/full/124573.jpg',
-            link: '/'
-        },
-        {
-            src: 'https://hdwallpaperim.com/wp-content/uploads/2017/08/22/435641-ultra-wide-space.jpg',
-            link: '/'
-        },]
+const getCarrouselImages = (itens?: Item[]) => {
+    itens = itens ? itens : [];
+    let srcAndLink: any[] = [];
+    let prioridade: Item[] = [];
+    let normal: Item[] = [];
+    itens.forEach(item=>{
+        if(item.fixarNoInicio)
+            prioridade.push(item);
+        else
+            normal.push(item);
+    });
+
+    for(let i = 0; i < prioridade.length; ++i) {
+        let imgs = prioridade[i].imagensCarrossel;
+        if(imgs && imgs.length > 0) {
+            srcAndLink.push({
+                src: imgs[0],
+                link: '/item/'+prioridade[i].id,
+            })
+        }
+    }
+    for(let i = 0; i < normal.length && srcAndLink.length < 6; ++i) {
+        let imgs = normal[i].imagensCarrossel;
+        if(imgs && imgs.length > 0) {
+            srcAndLink.push({
+                src: imgs[0],
+                link: '/item/'+normal[i].id,
+            })
+        }
+    }
+
+    return srcAndLink;
 }
 
 const CarrouselButtons = (props:{numDots: number, indexCurentImage: number, updateDotBtn: (n: number)=>void}) => {
@@ -47,7 +54,9 @@ const CarrouselButtons = (props:{numDots: number, indexCurentImage: number, upda
     )
 }
 
-const Carrousel = () => {
+const Carrousel = (values: {itens?: Item[]}) => {
+    let { itens } = {...values};
+
     const updateDot = () => {
         setIndexCurentImage((indexCurentImage+1)%carrouselImages.length);
     }
@@ -63,7 +72,12 @@ const Carrousel = () => {
     useEffect(()=>{
         timeoutCarrousel.map(t => clearTimeout(t));
         timeoutCarrousel.push(setTimeout(()=>updateDot(), 7000));
-    }, [indexCurentImage]);
+    }, [indexCurentImage, carrouselImages]);
+
+    useEffect(()=>{
+        setCarrouselImages(getCarrouselImages(itens));
+        setIndexCurentImage(0);
+    }, [itens])
 
     return (
         <div className={'carrousel-box'}>

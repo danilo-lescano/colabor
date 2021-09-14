@@ -45,7 +45,7 @@ const Loja = () => {
 
     return (
         <>
-            <Carrousel/>
+            <Carrousel itens={itens}/>
             <div style={{verticalAlign: 'top', position: 'relative', width: '70%', marginLeft: '50%', transform: 'translate(-50%)', minWidth: '1000px', maxWidth: '1080px'}}>
                 <div className={'left-navbar-box'}>
                     <div className={'left-navbar-explore'}>EXPLORE!</div>
@@ -90,7 +90,7 @@ const Loja = () => {
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
                                         {i.subcategoria ? <>
                                             <span className={'item-loja-tag ' + renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: getCor(i.subcategoria.idCategoria)}}><span className={'item-loja-tag-text ' + renderMode}>{getNome(i.subcategoria.idCategoria)}</span></span>
-                                            <span className={'item-loja-tag ' + renderMode + ' '}><span className={'item-loja-tag-text ' + renderMode}>{i.subcategoria.nome}</span></span>
+                                            <span className={'item-loja-tag ' + renderMode + ' subcategoria'}><span className={'item-loja-tag-text ' + renderMode}>{i.subcategoria.nome}</span></span>
                                         </> : null}
                                     </div>
                                 </span>
