@@ -37,8 +37,14 @@ const Carrousel = (values: {imgs: string[] | undefined}) => {
     const [timeoutCarrousel] = useState<ReturnType<typeof setTimeout>[]>([]);
 
     useEffect(()=>{
-        if(imgs)
-            setCarrouselImages(imgs);
+        if(imgs) {
+            let urls: string[] = []
+            imgs.forEach(image => {
+                if(image)
+                    urls.push(image)
+            })
+            setCarrouselImages(urls);
+        }
     }, [imgs]);
     useEffect(()=>{
         timeoutCarrousel.map(t => clearTimeout(t));
