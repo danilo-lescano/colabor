@@ -436,13 +436,33 @@ body {
 
 .carrousel-box {
 	width: 100%;
+	max-width: 1920px;
+	margin-left: 50%;
 	margin-bottom: 50px;
 	overflow: hidden;
 	position: relative;
+	transform: translate(-50%);
 }
 .carrousel-inner-box {
+	overflow: hidden;
 	position: relative;
 	transition: ease 300ms;
+	max-height: 1080px;
+}
+.carrousel-inner-box > span {
+	max-height: 1080px;
+	max-width: 1920px;
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+}
+.carrousel-inner-box > span > * > img {
+	top: 50%;
+	left: 50%;
+	min-width: 100%;
+	min-height: 100%;
+	position: absolute;
+	transform: translate(-50%, -50%);
 }
 .carrousel-dot-box {
 	margin: 30px 0 0 0;
