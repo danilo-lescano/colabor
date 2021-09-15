@@ -456,7 +456,7 @@ body {
 	display: inline-block;
 	overflow: hidden;
 }
-.carrousel-inner-box > span > * > img {
+.carrousel-inner-box-img {
 	top: 50%;
 	left: 50%;
 	min-width: 100%;
@@ -561,7 +561,11 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
-.item-loja-main-section-left-tag.big {
+.item-loja-btn-compra {
+	position: relative;
+	display: inline-block;
+	margin-right: 8px;
+	text-transform: uppercase;
 	font-family: Futura;
 	font-size: 2em;
 	font-weight: bold;
@@ -571,6 +575,7 @@ body {
 	border: none;
 	background-color: #48451c;
 	color: white;
+	cursor: pointer;
 }
 .item-loja-main-section-right {
 	display: inline-block;

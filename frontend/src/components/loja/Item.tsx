@@ -57,7 +57,7 @@ const Carrousel = (values: {imgs: string[] | undefined}) => {
             <div className={'carrousel-inner-box'} style={{width: 'calc( 100% *' + carrouselImages.length + ' )', transform: 'translateX(-' + 100/carrouselImages.length*indexCurentImage + '%)', height: 'calc( 100vw * 0.5625)'}}>
                 {Object.values(carrouselImages).map((image) =>
                     <span style={{width: 'calc( 100% /' + carrouselImages.length + ' )', height: 'calc( 100vw * 0.5625)'}}>
-                        <img key={image} src={image}/>
+                        <img key={image} src={image} className={'carrousel-inner-box-img'}/>
                     </span>
                 )}
             </div>
@@ -75,12 +75,23 @@ const ItemPage = () => {
 
     useEffect(()=>{
         getItem();
-    },[])
+    },[]);
 
     const getItem = async () => {
         let resp: any = await GetItem(lojaitemId);
         if(resp && resp.data)
             setItem(resp.data as Item);
+    }
+
+    const comprar = async () => {
+        if(item && item.id) {
+	        let carrinho: any = localStorage.getItem('carrinho-colabor');
+            if(!carrinho) carrinho = [];
+            else carrinho = JSON.parse(carrinho);
+            carrinho.push(item);
+            localStorage.setItem('carrinho-colabor', JSON.stringify(carrinho))
+            console.log(localStorage.getItem('carrinho-colabor'));
+        }
     }
 
     return (
@@ -102,7 +113,7 @@ const ItemPage = () => {
                     <div>
                         <div className={'item-loja-main-section-right-preco'}>R$ {item.preco?.toFixed(2)}</div>
                         <div className={'item-loja-main-section-right-preco-parcela'}>ou em <span>10x {(item.preco ? item.preco : 0/10).toFixed(2)}</span></div>
-                        <span className={'item-loja-main-section-left-tag big'}><span className={'item-loja-main-section-left-tag-text'}>COMPRAR!</span></span>
+                        <button className={'item-loja-btn-compra'} onClick={comprar}><span className={'item-loja-main-section-left-tag-text'}>COMPRAR!</span></button>
                     </div>
                 </div>
             </div>
