@@ -84,7 +84,7 @@ const Carrousel = (values: {itens?: Item[]}) => {
             <div className={'carrousel-inner-box'} style={{width: 'calc( 100% *' + carrouselImages.length + ' )', transform: 'translateX(-' + 100/carrouselImages.length*indexCurentImage + '%)', height: 'calc( 100vw * 0.5625)'}}>
                 {Object.values(carrouselImages).map((image) =>
                     <span style={{width: 'calc( 100% /' + carrouselImages.length + ' )', height: 'calc( 100vw * 0.5625)'}}>
-                        <Link to={image.link}><img key={image.src} src={image.src}/></Link>
+                        <Link to={image.link}><img key={image.src} src={image.src} className={'carrousel-inner-box-img'}/></Link>
                     </span>
                 )}
             </div>
