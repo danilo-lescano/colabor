@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Redirect } from 'react-router';
 import Logar from '../../api/logar';
+import Session from '../../session/Session'
 
 
 
@@ -8,7 +9,10 @@ const Login = function () {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 	const [session, setSession] = useState(localStorage.getItem('session'));
+    const [teste] = useContext(Session);
 
+    console.log(teste)
+    
     const tentarLogar = async (email: string, senha: string) => {
         let login: any = await Logar(email, senha);
         if(login.id) {
@@ -16,6 +20,8 @@ const Login = function () {
             window.location.reload();
         }
     }
+
+    
 
     return (
         session ? <Redirect to={'/'}/> :

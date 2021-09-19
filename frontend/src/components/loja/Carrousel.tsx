@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Item from "../../model/Item";
+import Session from "../../session/Session";
 
 
 const getCarrouselImages = (itens?: Item[]) => {
@@ -68,6 +69,11 @@ const Carrousel = (values: {itens?: Item[]}) => {
     const [carrouselImages, setCarrouselImages] = useState(getCarrouselImages());
     const [indexCurentImage, setIndexCurentImage] = useState(0);
     const [timeoutCarrousel] = useState<ReturnType<typeof setTimeout>[]>([]);
+
+
+    
+
+
 
     useEffect(()=>{
         timeoutCarrousel.map(t => clearTimeout(t));
