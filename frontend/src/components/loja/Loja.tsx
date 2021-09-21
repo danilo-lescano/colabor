@@ -65,7 +65,10 @@ const Loja = () => {
                         <div className={'left-navbar-format-btn'} onClick={()=>setRenderMode('page-mode')}></div>
                     </div>
                     <div>
-                        <input type={'text'} placeholder={'Pesquisar'} className={'left-navbar-input'}/>
+                        <input type={'text'} placeholder={'Pesquisar'} className={'left-navbar-input'}
+                            onChange={e=>{
+                                console.log(e.target.value)
+                            }}/>
                     </div>
                     {categorias.map((c)=>{
                         return <div className={'left-navbar-secao'}>
