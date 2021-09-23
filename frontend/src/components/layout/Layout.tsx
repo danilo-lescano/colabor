@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useContext, useState} from 'react';
 import '../shared/css.css';
 import logo from '../../assets/logo.svg';
 import footerLogo from '../../assets/footer-logo.svg';
@@ -8,6 +8,7 @@ import pag1 from '../../assets/pag1.png';
 import pag2 from '../../assets/pag2.png';
 import pag3 from '../../assets/pag3.png';
 import pag4 from '../../assets/pag4.png';
+import Session from '../../session/Session';
 
 
 interface ILayoutProps {
@@ -33,6 +34,9 @@ const Header = function () {
     const {pathname: path} = useLocation();
     const selectedClass = 'active header-menu-item';
     const notSelectedClass = 'header-menu-item';
+    const {carrinho} = useContext(Session);
+
+
     return (
         <div className={'header-box'}>
             <img className={'header-logo-img'} src={logo} alt={'Cofab logo'}/>
@@ -46,7 +50,14 @@ const Header = function () {
                 {session ? <Logout/> :
                     <Link to='/login' className={`/${path.split('/')[1]}` === '/login' ? selectedClass : notSelectedClass}>Cadastro/Login</Link> }
             </div>
-            <img className={'header-cart-img'} src={cart} alt={'carinho'}/>
+            <Link to='/carrinho'>
+                
+                <div className={'header-cart-img'}>
+                    <img src={cart} alt={'carinho'}/>
+                    <span className={'header-cart-num'}>{carrinho.length > 0 ? carrinho.length : ''}</span>
+                </div>
+                <img className={'header-cart-img'} src={cart} alt={'carinho'}/>
+            </Link>
         </div>
     )
 }

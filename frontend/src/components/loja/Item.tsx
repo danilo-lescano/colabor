@@ -77,7 +77,7 @@ const ItemPage = () => {
 
     useEffect(()=>{
         getItem();
-    },[]);
+    }, []);
 
     const getItem = async () => {
         let resp: any = await GetItem(lojaitemId);
@@ -88,7 +88,7 @@ const ItemPage = () => {
     const comprar = async () => {
         if(item && item.id) {
             carrinho.push(item);
-            localStorage.setItem('carrinho-colabor', JSON.stringify(carrinho))
+            localStorage.setItem('carrinho-colabor', JSON.stringify(carrinho));
             setCarrinho([...carrinho]);
         }
     }

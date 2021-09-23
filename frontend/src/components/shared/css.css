@@ -41,6 +41,19 @@ body {
 	left: auto;
 	right: 0;
 }
+.header-cart-img > img{
+	position: relative;
+	width: 100%;
+}
+.header-cart-num {
+	position: absolute;
+	color: black;
+	top: 0;
+	right: 0;
+	transform: translate(100%, -100%);
+	font-size: 26px;
+	font-family: FuturaExtraBold;
+}
 .header-menu-items-wrapper {
 	display: inline-block;
     position: absolute;
