@@ -1,23 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom"
 import { GetCategorias } from "../../api/categoriaAPI";
 import { GetItens } from "../../api/ItemAPI";
 import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
-import Subcategoria from "../../model/Subcatecorias";
 import Carrousel from "./Carrousel";
-import Session from '../../session/Session'
 
 const Loja = () => {
     const [itens, setItens] = useState<Item[]>([]);
     const [categorias, setCategorias] = useState<Categoria[]>([]);
     const [renderMode, setRenderMode] = useState('card-mode'); // tuple-mode card-mode page-mode
 
-    const {teste} = useContext(Session);
-
-    console.log(teste)
-    
     useEffect(()=>{
         fetchItens();
         fetchCategorias();

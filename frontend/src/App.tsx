@@ -1,13 +1,19 @@
 import Routes from './components/router/Routes';
 import {BrowserRouter} from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Session from './session/Session'
 
 function App() {
-  const [teste, setTest] = useState('');
+  const [carrinho, setCarrinho] = useState<any[]>([]);
+
+  useEffect(()=>{
+    let localStorageCarrinho = localStorage.getItem('carrinho-colabor');
+    if(localStorageCarrinho)
+      setCarrinho(JSON.parse(localStorageCarrinho));
+  }, [])
 
   return (
-    <Session.Provider value={{teste, setTest}}>
+    <Session.Provider value={{carrinho, setCarrinho}}>
       <div className="container">
         <BrowserRouter>
           <Routes/>

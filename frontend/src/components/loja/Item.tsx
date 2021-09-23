@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { GetItem } from "../../api/ItemAPI";
 import Item from "../../model/Item";
+import Session from '../../session/Session'
 
 
 const CarrouselButtons = (props:{numDots: number, indexCurentImage: number, updateDotBtn: (n: number)=>void}) => {
@@ -72,6 +73,7 @@ const Carrousel = (values: {imgs: string[] | undefined}) => {
 const ItemPage = () => {
     const {lojaitemId} = useParams<any>();
     const [item, setItem] = useState<Item>({id: '', nome: ''});
+    const {carrinho, setCarrinho} = useContext(Session);
 
     useEffect(()=>{
         getItem();
@@ -85,12 +87,9 @@ const ItemPage = () => {
 
     const comprar = async () => {
         if(item && item.id) {
-	        let carrinho: any = localStorage.getItem('carrinho-colabor');
-            if(!carrinho) carrinho = [];
-            else carrinho = JSON.parse(carrinho);
             carrinho.push(item);
             localStorage.setItem('carrinho-colabor', JSON.stringify(carrinho))
-            console.log(localStorage.getItem('carrinho-colabor'));
+            setCarrinho([...carrinho]);
         }
     }
 
