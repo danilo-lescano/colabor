@@ -694,3 +694,42 @@ body {
 .display-none {
 	display: none;
 }
+
+
+
+
+
+
+
+.carrinho-titulo {
+	display: inline-block;
+}
+.carrinho-btn-compra-text {
+	display: inline-block;
+	position: relative;
+	padding: 10px 30px;
+}
+.carrinho-btn-compra {
+	margin: 20px 0;
+	position: absolute;
+	right: 0;
+	display: inline-block;
+	margin-right: 8px;
+	text-transform: uppercase;
+	font-family: Futura;
+	font-size: 23px;
+	font-weight: bold;
+	border-radius: 30px;
+	border: none;
+	background-color: #48451c;
+	color: white;
+	cursor: pointer;
+}
+.carrinho-colabor-checkout-block {
+	vertical-align: top;
+	display: inline-block;
+	margin-left: 20px;
+}
+.carrinho-colabor-checkout-block:nth-child(1) {
+	margin-left: 0;
+}

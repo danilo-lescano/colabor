@@ -8,6 +8,7 @@ import Contato from '../contato/Contato';
 import Login from '../login/Login';
 import Admin from '../admin/Admin';
 import Carrinho from '../carrinho/Carrinho';
+import Checkout from '../carrinho/Checkout';
 
 function tryParse(str: string | null) {
     if(!str)
@@ -30,6 +31,8 @@ const Routes = () => {
 				render={(props)=><Layout><Login/></Layout>}/>
 			<Route exact path={'/carrinho'}
 				render={(props)=><Layout><Carrinho/></Layout>}/>
+			<Route exact path={'/checkout'}
+				render={(props)=><Layout><Checkout/></Layout>}/>
 			<Route exact path={'/item/:lojaitemId'}
 				render={(props)=><Layout><Item/></Layout>}/>
 			{session ?

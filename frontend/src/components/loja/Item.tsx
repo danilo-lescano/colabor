@@ -1,10 +1,15 @@
 import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom"
+import {toast} from 'react-toastify';
 import { GetItem } from "../../api/ItemAPI";
 import Item from "../../model/Item";
 import Session from '../../session/Session'
 
+const toastConfig = {
+    autoClose: 3000,
+    position: toast.POSITION.BOTTOM_LEFT
+};
 
 const CarrouselButtons = (props:{numDots: number, indexCurentImage: number, updateDotBtn: (n: number)=>void}) => {
     const {numDots, indexCurentImage, updateDotBtn} = props;
@@ -90,6 +95,7 @@ const ItemPage = () => {
             carrinho.push(item);
             localStorage.setItem('carrinho-colabor', JSON.stringify(carrinho));
             setCarrinho([...carrinho]);
+            toast.success("Item adicionado ao carrinho", toastConfig);
         }
     }
 
@@ -111,7 +117,7 @@ const ItemPage = () => {
                 <div className={'item-loja-main-section-right'}>
                     <div>
                         <div className={'item-loja-main-section-right-preco'}>R$ {item.preco?.toFixed(2)}</div>
-                        <div className={'item-loja-main-section-right-preco-parcela'}>ou em <span>10x {(item.preco ? item.preco : 0/10).toFixed(2)}</span></div>
+                        <div className={'item-loja-main-section-right-preco-parcela'}>ou em <span>10x {(item.preco ? item.preco/10 : 0/10).toFixed(2)}</span></div>
                         <button className={'item-loja-btn-compra'} onClick={comprar}><span className={'item-loja-main-section-left-tag-text'}>COMPRAR!</span></button>
                     </div>
                 </div>
