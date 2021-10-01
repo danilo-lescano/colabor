@@ -22,10 +22,10 @@ const optionsPag = {
     paymentMethod: 'creditCard',//k
     currency: 'BRL',//k
     receiverEmail: `${EMAIL}`,//k
-    
+    shippingAddressRequired: false,//k
+    extraAmount: '0.00',//k
+    reference: `REF-COMPRA-${Date.now()}`,//k
     //notificationURL: 'https://sualoja.com.br/notificacao.html',
-
-
 
     itemId1: '0001',
     itemDescription1: 'Notebook Prata',
@@ -36,47 +36,11 @@ const optionsPag = {
     itemAmount2: '10000.00',
     itemQuantity2: 1,
 
-    reference: 'REF1234',
-
-    senderHash: '', //{{hash_do_comprador}},
-    senderName: 'Jose Comprador',
-    senderEmail: 'comprador@sandbox.pagseguro.com.br',
-    senderAreaCode: '11',
-    senderPhone: '56273440',
-    senderCPF: '22111944785',
-    creditCardToken: '', //{{token_do_cartao}},
-    creditCardHolderName: 'Jose Comprador',
-    creditCardHolderCPF: '22111944785',
-    creditCardHolderBirthDate: '27/10/1987',
-    creditCardHolderAreaCode: '11',
-    creditCardHolderPhone: '56273440',
-
-    shippingAddressRequired: false,
-    shippingAddressStreet: 'Av. Brig. Faria Lima',
-    shippingAddressNumber: '1384',
-    shippingAddressComplement: '5o andar',
-    shippingAddressDistrict: 'Jardim Paulistano',
-    shippingAddressPostalCode: '01452002',
-    shippingAddressCity: 'Sao Paulo',
-    shippingAddressState: 'SP',
-    shippingAddressCountry: 'BRA',
-    shippingType: 1,
-    shippingCost: '01.00',
-
-
-    installmentQuantity: 7,
+    //installmentQuantity: 1,
     installmentValue: '3030.94',
-    noInterestInstallmentQuantity: 5,
+    //noInterestInstallmentQuantity: 1,
 
 
-    billingAddressStreet: 'Av. Brig. Faria Lima',
-    billingAddressNumber: '1384',
-    billingAddressComplement: '5o andar',
-    billingAddressDistrict: 'Jardim Paulistano',
-    billingAddressPostalCode: '01452002',
-    billingAddressCity: 'Sao Paulo',
-    billingAddressState: 'SP',
-    billingAddressCountry: 'BRA',
 }
 
 const amILogged = async (tokenid) => {

@@ -52,6 +52,7 @@ const CheckoutNow = async (senderHash: string, creditCardToken: string, items: i
         }
     }
     return await API('tokenpagseguro', 'checkout', data);
+    
 }
 
 export {GetTokenPagSeguro};
