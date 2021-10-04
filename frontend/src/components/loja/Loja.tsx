@@ -45,7 +45,17 @@ const Loja = () => {
     return (
         <>
             <Carrousel itens={itens}/>
-            <div style={{verticalAlign: 'top', position: 'relative', width: '70%', marginLeft: '50%', transform: 'translate(-50%)', minWidth: '1000px', maxWidth: '1080px'}}>
+            <div className={'veja-mais-btn'} onClick={()=>window.scroll({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            })}>
+                <span>
+                    EXPLORE A<br/>
+                    <span style={{color: 'black'}}>NOSSA LOJA!</span><br/>
+                    <div className={'down-arrow'}><span></span></div>
+                </span>
+            </div>
+            <div className={'loja-wrapper'}>
                 <div className={'left-navbar-box'}>
                     <div className={'left-navbar-explore'}>EXPLORE!</div>
                     <div>
