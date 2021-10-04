@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-import { GetTokenPagSeguro } from "../../api/pagamentoAPI";
+import { CheckoutNow, GetTokenPagSeguro } from "../../api/pagamentoAPI";
 import Item from "../../model/Item";
 import Session from "../../session/Session";
 import Spinner from "../acessorios/Spinner";
@@ -40,6 +40,19 @@ const Checkout = function () {
     const [parcelas, setParcelas] = useState<Parcela[]>([]);
     const [cardToken, setCardToken] = useState('');
     const [nomeCartao, setNomeCartao] = useState('');
+    const [dataNasc, setDataNasc] = useState('');
+    const [cpf, setcpf] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [ddd, setddd] = useState('');
+    const [rua, setRua] = useState('');
+    const [numero, setNumero] = useState('');
+    const [bairro, setBairro] = useState('');
+    const [complemento, setComplemento] = useState('');
+    const [cidade, setCidade] = useState('');
+    const [estado, setEstado] = useState('');
+    const [cep, setcep] = useState('');
+    const [email, setEmail] = useState('');
+    
 
     useEffect(() => {
         let valor = 0;
@@ -118,9 +131,7 @@ const Checkout = function () {
         eval(`
             PagSeguroDirectPayment.getBrand({
                 cardBin: '${numCartao.substring(0,6)}',
-                success: success,
-                error: function(response) {},
-                complete: function(response) {}
+                success: success
             });
         `);
     }
@@ -130,11 +141,12 @@ const Checkout = function () {
             if(response && response.error) return;
             else if(response.installments[brand.name]) {
                 setParcelas(response.installments[brand.name]);
+                console.log(response.installments[brand.name])
             }
         }
         eval(`
             PagSeguroDirectPayment.getInstallments({
-                amount: 0.20, //${total.toFixed(2)},
+                amount: ${total.toFixed(2)},
                 maxInstallmentNoInterest: 2,
                 brand: '${brand.name}',
                 success: success,
@@ -180,6 +192,80 @@ const Checkout = function () {
         }
     };
 
+
+    const sendCheckout = async () => {
+        let itens: {id: string, description: string, quantity: number, amount: number}[] = [];
+        for(let i = 0; i < carrinho.length; ++i){
+            let flag = true;
+            for(let j = 0; j < itens.length; ++j)
+                if(itens[j].id === carrinho[i].id) {
+                    flag = false;
+                    itens[j].quantity ++;
+                    break;
+                }
+            if(flag)
+                itens.push({id: carrinho[i].id, description: carrinho[i].descricao, amount: carrinho[i].preco, quantity: 1});
+        }
+        const aux = await CheckoutNow({
+            sender: {
+                name: nomeCartao,
+                email: email,
+                phone: {
+                    areaCode: ddd,
+                    number: telefone
+                },
+                cpf: cpf,
+                hash: senderHash
+            },
+            currency: 'BRL',
+            items: itens,
+            extraAmount: 0,
+            shippingAddressRequired: true,
+            shipping: {
+                address: {
+                    street: rua,
+                    number: parseInt(numero),
+                    complement: complemento,
+                    district: bairro,
+                    country: 'BRA',
+                    city: cidade,
+                    state: estado,
+                    postalCode: cep
+                },
+                type: 3,
+                cost: 0
+            },
+            creditCard: {
+                token: cardToken,
+                installment: {
+                    quantity: 1,
+                    value: 0,
+                    noInterestInstallmentQuantity: 2
+                },
+                holder: {
+                    name: nomeCartao,
+                    cpf: cpf,
+                    birthDate: dataNasc,
+                    phone: {
+                        areaCode: ddd,
+                        number: telefone
+                    }
+                },
+                billingAddress: {
+                    street: rua,
+                    number: parseInt(numero),
+                    complement: complemento,
+                    district: bairro,
+                    country: 'BRA',
+                    city: cidade,
+                    state: estado,
+                    postalCode: cep
+                }
+            }
+        });
+        console.log(aux);
+    }
+
     return (
         <>
             <div className={'block'} style={{marginBottom:50}}>
@@ -196,19 +282,19 @@ const Checkout = function () {
                 <div className={'carrinho-colabor-checkout-block'}>
                     <h2 className={'admin-navgation carrinho-titulo'}>ENDEREÇO</h2><br/>
                     Rua<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setRua(e.target.value)}/><br/><br/>
                     Número<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setNumero(e.target.value)}/><br/><br/>
                     Bairro<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setBairro(e.target.value)}/><br/><br/>
                     Complemento<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setComplemento(e.target.value)}/><br/><br/>
                     Cidade<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setCidade(e.target.value)}/><br/><br/>
                     Estado<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setEstado(e.target.value)}/><br/><br/>
                     CEP<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setcep(e.target.value)}/><br/><br/>
                 </div>
                 <div className={'carrinho-colabor-checkout-block'}>
                     <h2 className={'admin-navgation carrinho-titulo'}>
@@ -227,15 +313,17 @@ const Checkout = function () {
                     CVV<br/>
                     <input type={'text'} onChange={e =>{cartao.cvv = e.target.value; setCartao({...cartao});}}/><br/><br/>
                     Data de nasc. dono cartão<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} placeholder={'dd/MM/aaaa'} onChange={e => setDataNasc(e.target.value)}/><br/><br/>
                     cpf dono cartão<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setcpf(e.target.value)}/><br/><br/>
                 </div>
                 <div className={'carrinho-colabor-checkout-block'}>
-                    telefone<br/>
-                    <input type={'text'} /><br/><br/>
                     ddd<br/>
-                    <input type={'text'} /><br/><br/>
+                    <input type={'text'} onChange={e => setddd(e.target.value)}/><br/><br/>
+                    telefone<br/>
+                    <input type={'text'} onChange={e => setTelefone(e.target.value)}/><br/><br/>
+                    email<br/>
+                    <input type={'text'} onChange={e => setEmail(e.target.value)}/><br/><br/>
                 </div>
                 <div className={'carrinho-colabor-checkout-block'}>
                     <h2 className={'admin-navgation carrinho-titulo'} style={{color:'black'}}>
@@ -247,7 +335,7 @@ const Checkout = function () {
             <div className={'block'} style={{marginBottom:50}}>
                 <div style={{height:1, backgroundColor:'black'}}></div>
                 <h1 className={'admin-navgation carrinho-titulo'}>VOLTAR</h1>
-                <button className={'carrinho-btn-compra'}><span className={'carrinho-btn-compra-text'}>FINALIZAR COMPRA!</span></button>
+                <button className={'carrinho-btn-compra'}><span className={'carrinho-btn-compra-text'} onClick={sendCheckout}>FINALIZAR COMPRA!</span></button>
             </div>
         </>
     )
