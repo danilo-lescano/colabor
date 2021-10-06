@@ -44,7 +44,7 @@ const Header = function () {
 
     return (
         <div className={'header-box'}>
-            <span onClick={()=>setOpenCloseMenu(!openCloseMenu)}>
+            <span className={'header-btn-burguer-wrapper'} onClick={()=>setOpenCloseMenu(!openCloseMenu)}>
                 <button className={'header-btn-burguer'}>
                     <span></span>
                     <span></span>
@@ -63,14 +63,7 @@ const Header = function () {
                 {session ? <Logout className={notSelectedClass}/> :
                     <Link to='/login' className={`/${path.split('/')[1]}` === '/login' ? selectedClass : notSelectedClass}>Cadastro/Login</Link> }
             </div>
-            <Link to='/carrinho'>
-                
-                <div className={'header-cart-img'}>
-                    <img src={cart} alt={'carinho'}/>
-                    <span className={'header-cart-num'}>{carrinho.length > 0 ? carrinho.length : ''}</span>
-                </div>
-                <img className={'header-cart-img'} src={cart} alt={'carinho'}/>
-            </Link>
+            <img className={'header-cart-img'} src={cart} alt={'carinho'}/>
         </div>
     )
 }

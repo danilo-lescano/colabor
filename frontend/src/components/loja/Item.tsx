@@ -118,7 +118,7 @@ const ItemPage = () => {
                     <div>
                         <div className={'item-loja-main-section-right-preco'}>R$ {item.preco?.toFixed(2)}</div>
                         <div className={'item-loja-main-section-right-preco-parcela'}>ou em <span>10x {(item.preco ? item.preco/10 : 0/10).toFixed(2)}</span></div>
-                        <button className={'item-loja-btn-compra'} onClick={comprar}><span className={'item-loja-main-section-left-tag-text'}>COMPRAR!</span></button>
+                        <button className={'item-loja-btn-compra'}><span className={'item-loja-main-section-left-tag-text'}>COMPRAR!</span></button>
                     </div>
                 </div>
             </div>

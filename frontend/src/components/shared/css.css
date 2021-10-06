@@ -752,6 +752,9 @@ body {
 .veja-mais-btn{
 	display: none;
 }
+.header-btn-burguer-wrapper {
+	display: none;
+}
 
 
 
@@ -837,6 +840,9 @@ body {
 	.header-cart-img {
 		width: 45px;
 		right: 40px;
+	}
+	.header-btn-burguer-wrapper {
+		display: initial;
 	}
 	.header-cart-num {
 		font-size: 20px;
