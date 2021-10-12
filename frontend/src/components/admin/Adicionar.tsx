@@ -122,6 +122,25 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
 
     return (
         <div style={{position: 'relative', width: '70%', maxWidth: '1080px', minWidth: '1000px', marginLeft: '50%', transform: 'translate(-50%)'}}>
+            <div>
+                <div style={{width: 350, height: 350, display: 'inline-block', marginRight: 15, boxSizing: 'border-box', border: 'black solid 1px', position: 'relative'}}>
+                    <span style={{position: 'absolute', top: '50%', left: '50%', transform:'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>Adicionar imagem principal*<br/><span style={{border: 'black solid 1px', borderRadius: '100%', textAlign: 'center', width: 20, height: 20, display: 'inline-block', marginTop: 10}}>+</span></span>
+                </div>
+                
+                <div style={{verticalAlign: 'top', display: 'inline-block', fontWeight: 'bold', width:'calc(100% - 365px)', position:'relative'}}>
+                    <div style={{marginBottom: 20}}>
+                        Nome do Produto*<br/>
+                        <input type={'text'} placeholder={'nome'} style={{backgroundColor:'rgba(0,0,0,0)', textDecoration:'underline', border:'none',outline:'none'}}/>
+                    </div>
+                    <div style={{marginBottom: 20}}>
+                        Preço*<br/>
+                        <input type={'text'} placeholder={'R$ 0,00'} style={{backgroundColor:'rgba(0,0,0,0)', textDecoration:'underline', border:'none',outline:'none'}}/>
+                    </div>
+                    <div style={{display:'inline-block', verticalAlign:'top', width:'100%'}}>Descrição / Apresentação<br/>
+                        <textarea style={{backgroundColor:'rgba(0,0,0,0)',width: '100%', height: 215, padding:5, display: 'inline-block', boxSizing: 'border-box', border: 'black solid 1px', position: 'relative',outline:'none'}}/>
+                    </div>
+                </div>
+            </div>
             <div style={{display: 'inline-block'}}>
                 <span>Categorias</span><br/><br/>
 

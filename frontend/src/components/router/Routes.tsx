@@ -27,17 +27,13 @@ const Routes = () => {
 				render={(props)=><Layout><Blog/></Layout>}/>
 			<Route exact path={'/contato'}
 				render={(props)=><Layout><Contato/></Layout>}/>
-			<Route exact path={'/login'}
-				render={(props)=><Layout><Login/></Layout>}/>
-			<Route exact path={'/carrinho'}
-				render={(props)=><Layout><Carrinho/></Layout>}/>
-			<Route exact path={'/checkout'}
-				render={(props)=><Layout><Checkout/></Layout>}/>
 			<Route exact path={'/item/:lojaitemId'}
 				render={(props)=><Layout><Item/></Layout>}/>
 			{session ?
-				<Route exact path={'/admin'}
-					render={(props)=><Layout><Admin/></Layout>}/> : null}
+				<Route exact path={'/admin'} render={(props)=><Layout><Admin/></Layout>}/>
+				: 
+				<Route exact path={'/admin'} render={(props)=><Layout><Login/></Layout>}/>
+			}
 		</Switch>
 	);
 };

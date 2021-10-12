@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { Redirect } from 'react-router';
 import Logar from '../../api/logar';
+import {toast} from 'react-toastify';
 
+const toastConfig = {
+    autoClose: 3000,
+    position: toast.POSITION.BOTTOM_LEFT
+};
 
 
 const Login = function () {
@@ -14,6 +19,9 @@ const Login = function () {
         if(login.id) {
             localStorage.setItem('session', JSON.stringify(login));
             window.location.reload();
+        }
+        else {
+            toast.error("Email ou senha inválido.", toastConfig);
         }
     }
 
