@@ -27,7 +27,7 @@ const Checkbox = function (values: {tag: string, onClick: (e:any)=>void, checked
     )
 }
 
-const DropImage = function (values: {url: string, onChange: (url:string)=>void}) {
+const DropImage = function (values: {url: string, onChange: (url:string)=>void, imgPrincipal?:boolean}) {
     const {url, onChange} = {...values};
     const [isDropover, setIsDropover] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -48,14 +48,26 @@ const DropImage = function (values: {url: string, onChange: (url:string)=>void})
         }
     };
     
+    if(!values.imgPrincipal)
+        return (
+            <div style={{display:'inline-block', width: 100, height: 100, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative', overflow: 'hidden'}}>
+                {url && url.length > 0 ? <img style={{width:'100%', left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}} src={url}/> :
+                <div style={{border: isDropover ? 'solid 3px black' : 'dotted 3px black', width: 80, height: 80, left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}}>
+                    <span style={{left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)', fontWeight: 'bold', fontSize: '2em'}}>+</span>
+                </div>}
+                {isLoading ? <div style={{width: 100, height: 100, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative'}}><span style={{left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}}><Spinner/></span></div>: null}
+                <div style={{position: 'absolute', top: 0, left: 0, width: 100, height: 100}}
+                    onDragOver={(e)=>{setIsDropover(true); e.preventDefault();}}
+                    onDragLeave={()=>{setIsDropover(false);}}
+                    onDrop={(e)=>onDrop(e)}></div>
+            </div>
+        )
     return (
-        <div style={{display:'inline-block', width: 100, height: 100, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative', overflow: 'hidden'}}>
+        <div style={{overflow: 'hidden', width: 350, height: 350, display: 'inline-block', marginRight: 15, boxSizing: 'border-box', border: 'black solid ' + (isDropover ? '2px' : '1px'), position: 'relative'}}>
             {url && url.length > 0 ? <img style={{width:'100%', left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}} src={url}/> :
-            <div style={{border: isDropover ? 'solid 3px black' : 'dotted 3px black', width: 80, height: 80, left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}}>
-                <span style={{left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)', fontWeight: 'bold', fontSize: '2em'}}>+</span>
-            </div>}
-            {isLoading ? <div style={{width: 100, height: 100, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative'}}><span style={{left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}}><Spinner/></span></div>: null}
-            <div style={{position: 'absolute', top: 0, left: 0, width: 100, height: 100}}
+           <span style={{position: 'absolute', top: '50%', left: '50%', transform:'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>Adicionar imagem principal*<br/><span style={{border: 'black solid 1px', borderRadius: '100%', textAlign: 'center', width: 20, height: 20, display: 'inline-block', marginTop: 10}}>+</span></span>}
+            {isLoading ? <div style={{width: 350, height: 350, backgroundColor: 'rgba(0,0,0,0.2)', position: 'relative'}}><span style={{left: '50%', top: '50%', position: 'absolute', transform: 'translate(-50%, -50%)'}}><Spinner/></span></div>: null}
+            <div style={{position: 'absolute', top: 0, left: 0, width: 350, height: 350}}
                 onDragOver={(e)=>{setIsDropover(true); e.preventDefault();}}
                 onDragLeave={()=>{setIsDropover(false);}}
                 onDrop={(e)=>onDrop(e)}></div>
@@ -123,22 +135,40 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
     return (
         <div style={{position: 'relative', width: '70%', maxWidth: '1080px', minWidth: '1000px', marginLeft: '50%', transform: 'translate(-50%)'}}>
             <div>
-                <div style={{width: 350, height: 350, display: 'inline-block', marginRight: 15, boxSizing: 'border-box', border: 'black solid 1px', position: 'relative'}}>
-                    <span style={{position: 'absolute', top: '50%', left: '50%', transform:'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>Adicionar imagem principal*<br/><span style={{border: 'black solid 1px', borderRadius: '100%', textAlign: 'center', width: 20, height: 20, display: 'inline-block', marginTop: 10}}>+</span></span>
-                </div>
+                <span style={{position:'relative', display:'inline-block'}}>
+                    <DropImage url={item.imagemPrincipal ? item.imagemPrincipal : ''} onChange={url=>{item.imagemPrincipal = url; setItem({...item});}} imgPrincipal={true}/>
+                    {item.imagemPrincipal ? <span onClick={()=>{item.imagemPrincipal=''; setItem({...item})}} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
+                </span>
                 
                 <div style={{verticalAlign: 'top', display: 'inline-block', fontWeight: 'bold', width:'calc(100% - 365px)', position:'relative'}}>
                     <div style={{marginBottom: 20}}>
                         Nome do Produto*<br/>
-                        <input type={'text'} placeholder={'nome'} style={{backgroundColor:'rgba(0,0,0,0)', textDecoration:'underline', border:'none',outline:'none'}}/>
+                        <input type={'text'} placeholder={'Nome'} style={{backgroundColor:'rgba(0,0,0,0)', textDecoration:'underline', border:'none',outline:'none'}}
+                            value={item.nome} onChange={(e)=>{item.nome = e.target.value; setItem({...item})}}/>
                     </div>
                     <div style={{marginBottom: 20}}>
                         Preço*<br/>
-                        <input type={'text'} placeholder={'R$ 0,00'} style={{backgroundColor:'rgba(0,0,0,0)', textDecoration:'underline', border:'none',outline:'none'}}/>
+                        <input type={'text'} placeholder={'R$ 0,00'} style={{backgroundColor:'rgba(0,0,0,0)', textDecoration:'underline', border:'none',outline:'none'}}
+                            value={item.preco ? 'R$ '+(parseFloat(item.preco.toString())/100).toFixed(2).replace('.', ',') : ''} onChange={(e) => {
+                                let aux: any = parseInt(e.target.value.replace(',', '').replace('.', '').replace('R$ ', ''));
+                                if(isNaN(aux)) {
+                                    return;
+                                }
+                                item.preco = aux;
+                                setItem({...item});
+                            }}/>
                     </div>
                     <div style={{display:'inline-block', verticalAlign:'top', width:'100%'}}>Descrição / Apresentação<br/>
-                        <textarea style={{backgroundColor:'rgba(0,0,0,0)',width: '100%', height: 215, padding:5, display: 'inline-block', boxSizing: 'border-box', border: 'black solid 1px', position: 'relative',outline:'none'}}/>
+                        <textarea value={item.descricao} onChange={(e)=>{item.descricao = e.target.value; setItem({...item})}} style={{backgroundColor:'rgba(0,0,0,0)',width: '100%', height: 215, padding:5, display: 'inline-block', boxSizing: 'border-box', border: 'black solid 1px', position: 'relative',outline:'none'}}/>
                     </div>
+                    <div style={{display:'inline-block', verticalAlign:'top', width:'100%'}}>Descrição Técnica<br/>
+                        <textarea value={item.descricaoTecnica} onChange={(e)=>{item.descricaoTecnica = e.target.value; setItem({...item})}} style={{backgroundColor:'rgba(0,0,0,0)',width: '100%', height: 215, padding:5, display: 'inline-block', boxSizing: 'border-box', border: 'black solid 1px', position: 'relative',outline:'none'}}/>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+
                 </div>
             </div>
             <div style={{display: 'inline-block'}}>
@@ -159,22 +189,6 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <input type={'hidden'} value={item.id}/>
-                <label>Nome do Produto</label><br/>
-                <input type={'text'} value={item.nome} onChange={(e)=>{item.nome = e.target.value; setItem({...item})}}/><br/><br/>
-                <label>Preço</label><br/>
-                <input type={'text'} value={item.preco ? parseFloat(item.preco.toString()) : ''} onChange={(e) => {
-                    let aux: any = parseFloat(e.target.value.replace(',', '.'));
-                    if(isNaN(aux)) {
-                        e.target.value = '';
-                        return;
-                    }
-                    item.preco = aux;
-                    setItem({...item});
-                }}/><br/><br/>
-                <label>Descrição/Apresentação</label><br/>
-                <input type={'text'} value={item.descricao} onChange={(e)=>{item.descricao = e.target.value; setItem({...item})}}/><br/><br/>
-                <label>Descrição Técnica</label><br/>
-                <input type={'text'} value={item.descricaoTecnica} onChange={(e)=>{item.descricaoTecnica = e.target.value; setItem({...item})}}/><br/><br/>
                 <label>Peso (kg)</label><br/>
                 <input type={'text'} value={item.peso} onChange={(e)=>{item.peso = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
                 <label>Altura (cm)</label><br/>
@@ -195,11 +209,6 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                 <label><input type='checkbox' checked={item.fixarNoInicio} onClick={()=>{item.fixarNoInicio = !item.fixarNoInicio; setItem({...item})}}/> Fixar no inicio</label><br/><br/>
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
-                <div>Imagem Principal</div>
-                <span style={{position:'relative', display:'inline-block'}}>
-                    <DropImage url={item.imagemPrincipal ? item.imagemPrincipal : ''} onChange={url=>{item.imagemPrincipal = url; setItem({...item});}}/>
-                    {item.imagemPrincipal ? <span onClick={()=>deleteImage('imagemPrincipal')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
-                </span><br/><br/>
                 <div>Imagens Carrosel</div>
                 {item.imagensCarrossel ? item.imagensCarrossel.map((imageURL, index)=>{
                     return(
@@ -217,7 +226,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                                         item.imagensCarrossel = [url];
                                     setItem({...item});
                                 }}/>
-                                {imageURL ? <span onClick={()=>deleteImage(imageURL)} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
+                                {imageURL ? <span onClick={()=>{item.imagensCarrossel?.splice(index, 1); setItem({...item})}} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                             </span><div style={{width: 5, display: 'inline-block'}}></div>
                             {index > 0 && index % 2 ? <br/> : null}
                         </span>
@@ -227,7 +236,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                 <div>Imagem Icone</div>
                 <span style={{position:'relative', display:'inline-block'}}>
                     <DropImage url={item.imagemIcone ? item.imagemIcone : ''} onChange={url=>{item.imagemIcone = url; setItem({...item});}}/>
-                    {item.imagemIcone ? <span onClick={()=>deleteImage('imagemIcone')} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
+                    {item.imagemIcone ? <span onClick={()=>{item.imagemIcone = ''; setItem({...item})}}  style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                 </span><br/><br/>
                 <div>Imagens Mosaico</div>
                 {item.imagensMosaico ? item.imagensMosaico.map((imageURL, index)=>{
@@ -247,7 +256,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                                         item.imagensMosaico = [url];
                                     setItem({...item});
                                 }}/>
-                                {imageURL ? <span onClick={()=>deleteImage(imageURL)} style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
+                                {imageURL ? <span onClick={()=>{item.imagensMosaico?.splice(index, 1); setItem({...item})}}  style={{position:'absolute', top:0, right:0, fontWeight:'bold', cursor: 'pointer'}}>X</span> : null}
                             </span><div style={{width: 5, display: 'inline-block'}}></div>
                             {index > 0 && index % 2 ? <br/> : null}
                         </span>

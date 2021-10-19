@@ -6,6 +6,7 @@ import { GetItens } from "../../api/ItemAPI";
 import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
 import Carrousel from "./Carrousel";
+import Tag from "../shared/Tag";
 
 const Loja = () => {
     const [itens, setItens] = useState<Item[]>([]);
@@ -100,10 +101,8 @@ const Loja = () => {
                                         <span style={{fontSize: '1.2em'}}>R$ {i.preco?.toFixed(2)}</span>
                                     </div>
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
-                                        {i.subcategoria ? <>
-                                            <span className={'item-loja-tag ' + renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: getCor(i.subcategoria.idCategoria)}}><span className={'item-loja-tag-text ' + renderMode}>{getNome(i.subcategoria.idCategoria)}</span></span>
-                                            <span className={'item-loja-tag ' + renderMode + ' subcategoria'}><span className={'item-loja-tag-text ' + renderMode}>{i.subcategoria.nome}</span></span>
-                                        </> : null}
+                                        {i.subcategoria ? <Tag categoria={getNome(i.subcategoria.idCategoria)} subcategoria={i.subcategoria.nome} renderMode={renderMode} cor={getCor(i.subcategoria.idCategoria)}/>
+                                        : null}
                                     </div>
                                 </span>
                             </div>

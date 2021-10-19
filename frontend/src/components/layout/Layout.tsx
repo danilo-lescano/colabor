@@ -4,10 +4,6 @@ import logo from '../../assets/logo.svg';
 import footerLogo from '../../assets/footer-logo.svg';
 import cart from '../../assets/cart.svg';
 import {Link, useLocation} from 'react-router-dom';
-import pag1 from '../../assets/pag1.png';
-import pag2 from '../../assets/pag2.png';
-import pag3 from '../../assets/pag3.png';
-import pag4 from '../../assets/pag4.png';
 import Session from '../../session/Session';
 
 
@@ -62,8 +58,8 @@ const Header = function () {
                 <Link to='/sobre' className={`/${path.split('/sobre')[1]}` === '/' ? selectedClass : notSelectedClass}>Sobre</Link>
                 {(session && session.role === 'admin') ?
                     <Link to='/admin' className={`/${path.split('/')[1]}` === '/admin' ? selectedClass : notSelectedClass}>Admin</Link> : null}
-                {/*session ? <Logout className={notSelectedClass}/> :
-                    <Link to='/login' className={`/${path.split('/')[1]}` === '/login' ? selectedClass : notSelectedClass}>Cadastro/Login</Link> */}
+                {session ? <Logout className={notSelectedClass}/> : null}
+                {/*    <Link to='/login' className={`/${path.split('/')[1]}` === '/login' ? selectedClass : notSelectedClass}>Cadastro/Login</Link> */}
             </div>
             <img className={'header-cart-img'} src={cart} alt={'carinho'}/>
         </div>
