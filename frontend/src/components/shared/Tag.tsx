@@ -7,7 +7,6 @@ const Tag = (value: {categoria: string, subcategoria: string, renderMode: string
         let cont = 0;
         for(let i = 0; i < str.length; i++)
             cont += sizes[a.indexOf(str[i])];
-        console.log(cont)
         if(value.renderMode === 'card-mode') {
             if(cont < 85)
                 return '1.2em';
@@ -22,15 +21,15 @@ const Tag = (value: {categoria: string, subcategoria: string, renderMode: string
         }
         else if(value.renderMode === 'tuple-mode') {
             if(cont < 50)
-                return '1.2em';
-            else if(cont < 55)
                 return '1.1em';
+            else if(cont < 55)
+                return '1.0em';
             else if(cont < 60)
-                return '1em';
-            else if(cont <= 65)
                 return '.9em';
-            else
+            else if(cont <= 65)
                 return '.8em';
+            else
+                return '.7em';
         }
         else if(value.renderMode === 'page-mode') {
             if(cont < 85)

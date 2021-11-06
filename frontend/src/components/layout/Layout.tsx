@@ -33,8 +33,11 @@ const Header = function () {
     const {carrinho} = useContext(Session);
     const [openCloseMenu, setOpenCloseMenu] = useState(false);
 
+    const [carrinhoClick, setCarrinhoClick] = useState(false);
+
     useEffect(()=>{
         setOpenCloseMenu(false);
+        setCarrinhoClick(false);
     },[path])
 
 
@@ -49,9 +52,9 @@ const Header = function () {
                 <img className={'header-logo-img clone'} src={logo} alt={'Cofab logo'}/>
             </span>
             <Link to='/'>
-                <img className={'header-logo-img'} src={logo} alt={'Cofab logo'}/>
+                <img className={`header-logo-img ${carrinhoClick ? 'move' : ''}`} src={logo} alt={'Cofab logo'}/>
             </Link>
-            <div className={`header-menu-items-wrapper ${openCloseMenu ? 'open' : ''}`}>
+            <div className={`header-menu-items-wrapper ${openCloseMenu ? 'open' : ''} ${carrinhoClick ? 'move' : ''}`}>
                 <Link to='/' className={`/${path.split('/')[1]}` === '/' ? selectedClass : notSelectedClass}>Home</Link>
                 {/*<Link to='/blog' className={`/${path.split('/')[1]}` === '/blog' ? selectedClass : notSelectedClass}>Blog</Link>*/}
                 <Link to='/contato' className={`/${path.split('/')[1]}` === '/contato' ? selectedClass : notSelectedClass}>Contato</Link>
@@ -61,7 +64,7 @@ const Header = function () {
                 {session ? <Logout className={notSelectedClass}/> : null}
                 {/*    <Link to='/login' className={`/${path.split('/')[1]}` === '/login' ? selectedClass : notSelectedClass}>Cadastro/Login</Link> */}
             </div>
-            <img className={'header-cart-img'} src={cart} alt={'carinho'}/>
+            <img className={'header-cart-img clickable'} src={cart} alt={'carinho'} onClick={()=>setCarrinhoClick(!carrinhoClick)}/>
         </div>
     )
 }

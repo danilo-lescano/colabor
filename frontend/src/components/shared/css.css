@@ -11,8 +11,7 @@
 	src: url(../../assets/Futura/FuturaPTExtraBold.otf);
 }
 body {
-	background-color: #f2ede6;
-	background-color: #eae6da;
+	background-color: #F3EDE5;
 	font-family: SerifaStd;
 }
 
@@ -27,6 +26,7 @@ body {
 	height: 10rem;
 	position: relative;
 	font-family: SerifaStd;
+	overflow: hidden;
 }
 .header-logo-img, .header-cart-img {
 	width: 5rem;
@@ -35,6 +35,10 @@ body {
 	left: 0;
     top: 50%;
     transform: translateY(-50%);
+	transition: left ease 0.3s;
+}
+.header-logo-img.move {
+	left: 100%;
 }
 .header-logo-img.clone {
 	display: none;
@@ -63,6 +67,9 @@ body {
     top: 50%;
     transform: translateY(-50%);
 	font-size: 1.1em;
+}
+.header-menu-items-wrapper.move {
+	right: -100%;
 }
 .header-menu-item {
 	padding: 0 10px;
@@ -253,6 +260,7 @@ body {
 	font-weight: bold;
 	font-family: Futura;
 	width: 50%;
+	font-size: 2em;
 }
 .item-loja-tags-minibox {
 	position: relative;
@@ -326,7 +334,7 @@ body {
 }
 .item-loja-nome-preco-minibox.tuple-mode {
 	margin-left: 30px;
-	font-size: 1.3em;
+	font-size: 2em;
 }
 .item-loja-tags-minibox.tuple-mode {
 	margin-left: 22px;
@@ -357,6 +365,8 @@ body {
 	width: initial;
 	height: initial;
 	display: block;
+	margin: 0;
+	margin-bottom: 50px;
 }
 .item-loja-card.page-mode {
 	width: 100%;
@@ -373,9 +383,6 @@ body {
 	transform: none;
 }
 
-.item-loja-card.page-mode {
-	margin: 0;
-}
 
 
 
@@ -757,6 +764,12 @@ body {
 	display: none;
 }
 
+.clickable {
+	cursor: pointer;
+}
+.bold {
+	font-weight: bold;
+}
 
 
 
@@ -783,8 +796,9 @@ body {
 		z-index: 2;
 		top: 0;
 		position: sticky;
+		overflow: initial;
 	}
-	.header-menu-items-wrapper {
+	.header-menu-items-wrapper, .header-menu-items-wrapper.move {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -802,7 +816,7 @@ body {
 	.header-menu-item:nth-child(1) {
 		margin-top: 150px;
 	}
-	.header-menu-items-wrapper.open {
+	.header-menu-items-wrapper.open, .header-menu-items-wrapper.move.open {
 		transform: translate(0, 0);
 	}
 	.header-logo-img {
@@ -920,5 +934,15 @@ body {
 	}
 	.item-loja-main-section-left {
 		width: 50%;
+	}
+	.item-loja-nome-preco-minibox {
+		font-size: 1.2em;
+		width: calc(50% - 5px);
+		margin-right: 5px;
+	}
+	.item-loja-tag {
+		width: 100%;
+		margin: 0;
+		box-sizing: border-box;
 	}
 }

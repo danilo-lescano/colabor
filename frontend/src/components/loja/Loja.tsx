@@ -13,6 +13,9 @@ const Loja = () => {
     const [categorias, setCategorias] = useState<Categoria[]>([]);
     const [renderMode, setRenderMode] = useState('card-mode'); // tuple-mode card-mode page-mode
 
+    const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
+    const [fieldPesquisa, setFieldPesquisa] = useState('');
+
     useEffect(()=>{
         fetchItens();
         fetchCategorias();
@@ -43,6 +46,42 @@ const Loja = () => {
         return ''
     }
 
+    const addOrRemoveSubCategories = (categoriaNome: string, subcategoriaList: string[]) => {
+        const remove = () => {
+            for(let i = 0; i < subcategoriaList.length; ++i) {
+                let index = selectedSubCategories.indexOf(subcategoriaList[i]);
+                if(index > -1)
+                    selectedSubCategories.splice(index, 1);
+            }
+            setSelectedSubCategories([...selectedSubCategories]);
+            console.log(selectedSubCategories);
+        }
+        const add = () => {
+            let aux = selectedSubCategories.concat(subcategoriaList);
+            aux.filter((item, index) => aux.indexOf(item) === index);
+            console.log(aux)
+            setSelectedSubCategories(aux);
+        }
+
+        for(let i = 0; i < subcategoriaList.length; ++i)
+            subcategoriaList[i] = `${categoriaNome}-${subcategoriaList[i]}`;
+
+        let flag = false;
+        if(subcategoriaList.length === 1)
+            flag = selectedSubCategories.includes(subcategoriaList[0]);
+        else
+            for(let i = 0; i < selectedSubCategories.length; ++i) {
+                if(selectedSubCategories[i].startsWith(categoriaNome + '-')) {
+                    flag = true;
+                    break;
+                }
+            }
+        if(flag)
+            remove();
+        else
+            add();
+    }
+
     return (
         <>
             <Carrousel itens={itens}/>
@@ -71,24 +110,30 @@ const Loja = () => {
                     </div>
                     <div>
                         <input type={'text'} placeholder={'Pesquisar'} className={'left-navbar-input'}
-                            onChange={e=>{
-                                console.log(e.target.value)
-                            }}/>
+                            onChange={e=>setFieldPesquisa(e.target.value)}/>
                     </div>
                     {categorias.map((c)=>{
                         return <div className={'left-navbar-secao'}>
-                            <div><span style={{backgroundColor: c.cor}}></span>{c.nome.toUpperCase()}</div>
+                            <div className={"clickable"} onClick={
+                                () => addOrRemoveSubCategories(c.nome, c.subcategorias ? [...c.subcategorias] : [])
+                            }><span style={{backgroundColor: c.cor}}></span>{c.nome.toUpperCase()}</div>
                             {c.subcategorias?.map((sc)=>{
-                                return <div>{sc}</div>
+                                let bold = selectedSubCategories.includes(`${c.nome}-${sc}`);
+                                return <div className={bold ? 'clickable bold' : 'clickable'} onClick={() => addOrRemoveSubCategories(c.nome, [sc])}>{sc}</div>
                             })}
                         </div>
                     })}
-                    <div className={'left-navbar-texto-vazado'}><span style={{backgroundColor: "red"}}></span>OFERTAS/<br/>FRETE GRÁTIS</div>
+                    {/*<div className={'left-navbar-texto-vazado'}><span style={{backgroundColor: "red"}}></span>OFERTAS/<br/>FRETE GRÁTIS</div>*/}
                 </div>
                 
                 <div className={'itens-loja-box ' + renderMode}>
                     {itens.map((i)=>{
-                        return (
+                        let categoriaNome = i.subcategoria ? getNome(i.subcategoria.idCategoria) : '';
+                        let subcategoriaNome = i.subcategoria ? i.subcategoria.nome : '';
+                        let cor = i.subcategoria ? getCor(i.subcategoria.idCategoria) : '';
+                        let regex = new RegExp(fieldPesquisa.toUpperCase());
+                        let flag = (selectedSubCategories.includes(`${categoriaNome}-${subcategoriaNome}`) || selectedSubCategories.length === 0) && (fieldPesquisa === '' || regex.test(i.nome.toUpperCase()));
+                        return flag ? (
                             <div className={'item-loja-card ' + renderMode}>
                                 <Link to={`/item/${i.id}`}>
                                     <div className={'item-loja-card-minibox ' + renderMode}>
@@ -98,15 +143,13 @@ const Loja = () => {
                                 <span className={'item-loja-span ' + renderMode}>
                                     <div className={'item-loja-nome-preco-minibox ' + renderMode}>
                                         <span>{i.nome}</span><br/>
-                                        <span style={{fontSize: '1.2em'}}>R$ {i.preco?.toFixed(2)}</span>
                                     </div>
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
-                                        {i.subcategoria ? <Tag categoria={getNome(i.subcategoria.idCategoria)} subcategoria={i.subcategoria.nome} renderMode={renderMode} cor={getCor(i.subcategoria.idCategoria)}/>
-                                        : null}
+                                        <Tag categoria={categoriaNome} subcategoria={subcategoriaNome} renderMode={renderMode} cor={cor}/>
                                     </div>
                                 </span>
                             </div>
-                        )
+                        ): null;
                     })}
                 </div>
             </div>

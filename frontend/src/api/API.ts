@@ -6,8 +6,6 @@ const API = async (apiName: string, operation: string, data?: any, url?: string)
         let URL: string = url ? url : "https://5im5aom4s4.execute-api.sa-east-1.amazonaws.com/final/" + apiName;
         xhr.open("POST", URL, true);
         xhr.onload = async function () {
-            console.log('not err')
-            console.log(xhr)
             if (this.status >= 200 && this.status < 300) {
                 let aux = JSON.parse(xhr.response);
                 if(xhr && xhr.response && aux){
@@ -28,8 +26,6 @@ const API = async (apiName: string, operation: string, data?: any, url?: string)
                 reject(resp)
         };
         xhr.onerror = function () {
-            console.log('err')
-            console.log(xhr)
             resp = {message: xhr.statusText};
             reject(resp)
         };
