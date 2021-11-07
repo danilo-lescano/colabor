@@ -1,10 +1,9 @@
-import {FC, useContext, useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import '../shared/css.css';
 import logo from '../../assets/logo.svg';
 import footerLogo from '../../assets/footer-logo.svg';
 import cart from '../../assets/cart.svg';
 import {Link, useLocation} from 'react-router-dom';
-import Session from '../../session/Session';
 
 
 interface ILayoutProps {
@@ -30,7 +29,6 @@ const Header = function () {
     const {pathname: path} = useLocation();
     const selectedClass = 'active header-menu-item';
     const notSelectedClass = 'header-menu-item';
-    const {carrinho} = useContext(Session);
     const [openCloseMenu, setOpenCloseMenu] = useState(false);
 
     const [carrinhoClick, setCarrinhoClick] = useState(false);
@@ -70,9 +68,6 @@ const Header = function () {
 }
 
 const Footer = function () {
-    const {pathname: path} = useLocation();
-    const selectedClass = 'active header-menu-item';
-    const notSelectedClass = 'header-menu-item';
     return (
         <div className={'footer-box'}>
             <div className={'footer-upper-subbox'}>
@@ -81,14 +76,9 @@ const Footer = function () {
                         <img className={'footer-logo-img'} src={footerLogo}/>
                     </Link>
                 </div>
-                <div className={'footer-links'}>
-                    <Link to='/' className={`/${path.split('/')[1]}` === '/' ? selectedClass : notSelectedClass} style={{marginRight:'50px'}}>Home</Link>
-                    <Link to='/sobre' className={`/${path.split('/sobre')[1]}` === '/' ? selectedClass : notSelectedClass}>Sobre</Link><br/><br/>
-                    <Link to='/contato' className={`/${path.split('/')[1]}` === '/contato' ? selectedClass : notSelectedClass}>Contato</Link>
-                </div>
             </div>
             <div className={'footer-break-line'}></div>
-            <span style={{fontSize:'0.9em'}}>Instagram | Youtube | Behance | Facebook</span>
+            <span className={'footer-social-networks'} style={{fontSize:'0.9em'}}>Instagram | Youtube | Behance | Facebook</span>
         </div>
     )
 }

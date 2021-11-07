@@ -413,6 +413,8 @@ body {
 	width: 5rem;
 	display: inline-block;
 	position: relative;
+	left: 50%;
+	transform: translate(-50%);
 }
 .footer-logo-img {
 	width: 100%;
@@ -460,6 +462,12 @@ body {
 	padding: 0;
 	font-family: SerifaStd;
 	font-size: 1.2em;
+}
+.footer-social-networks {
+	position: relative;
+	display: inline-block;
+	left: 50%;
+	transform: translate(-50%);
 }
 
 
@@ -585,13 +593,18 @@ body {
 	display: inline-block;
 	margin-right: 8px;
 	height: 30px;
-	width: 100px;
+	width: 110px;
 	border-radius: 20px;
 	text-transform: uppercase;
 	border: solid black 1px;
 }
+.item-loja-main-section-left-tag.no-border {
+	border: none;
+}
 .item-loja-main-section-left-tag-text {
 	position: absolute;
+	width: 100%;
+	text-align: center;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);

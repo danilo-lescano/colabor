@@ -2,7 +2,9 @@ import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom"
 import {toast} from 'react-toastify';
+import { GetCategorias } from "../../api/categoriaAPI";
 import { GetItem } from "../../api/ItemAPI";
+import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
 import Session from '../../session/Session'
 
@@ -79,8 +81,10 @@ const ItemPage = () => {
     const {lojaitemId} = useParams<any>();
     const [item, setItem] = useState<Item>({id: '', nome: ''});
     const {carrinho, setCarrinho} = useContext(Session);
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
 
     useEffect(()=>{
+        fetchCategorias();
         getItem();
     }, []);
 
@@ -88,6 +92,24 @@ const ItemPage = () => {
         let resp: any = await GetItem(lojaitemId);
         if(resp && resp.data)
             setItem(resp.data as Item);
+    }
+
+    const fetchCategorias = async () => {
+        let resp : any = await GetCategorias();
+        if(resp.data)
+            setCategorias(resp.data as Categoria[])
+    };
+    const getCor = (id: string)=>{
+        for(let i = 0; i < categorias.length; ++i)
+            if(categorias[i].id === id)
+                return categorias[i].cor;
+        return ''
+    }
+    const getNome = (id: string)=>{
+        for(let i = 0; i < categorias.length; ++i)
+            if(categorias[i].id === id)
+                return categorias[i].nome;
+        return ''
     }
 
     const comprar = async () => {
@@ -108,17 +130,18 @@ const ItemPage = () => {
                     <div className={'item-loja-main-section-left-title'}>{item.nome}</div>
                     <div className={'item-loja-main-section-left-subtitle'}>Produto <span>Coletivo Labor</span></div>
                     <div className={'item-loja-main-section-left-tags-minibox'}>
-                        {item.subcategoria ? Object.values(item.subcategoria).map((c:any) =>
-                            <span className={'item-loja-main-section-left-tag'}><span className={'item-loja-main-section-left-tag-text'}>{c}</span></span>
-                        ) : null}
+                        {item.subcategoria ? <>
+                            <span className={'item-loja-main-section-left-tag no-border'} style={{backgroundColor: getCor(item.subcategoria.idCategoria)}}><span className={'item-loja-main-section-left-tag-text'}>{getNome(item.subcategoria.idCategoria)}</span></span>
+                            <span className={'item-loja-main-section-left-tag'}><span className={'item-loja-main-section-left-tag-text'}>{item.subcategoria.nome}</span></span>
+                        </> : null}
                     </div>
                     <div style={{textAlign: 'justify'}}>{item.descricao}</div>
                 </div>
                 <div className={'item-loja-main-section-right'}>
                     <div>
-                        <div className={'item-loja-main-section-right-preco'}>R$ {item.preco?.toFixed(2)}</div>
-                        <div className={'item-loja-main-section-right-preco-parcela'}>ou em <span>10x {(item.preco ? item.preco/10 : 0/10).toFixed(2)}</span></div>
-                        <button className={'item-loja-btn-compra'}><span className={'item-loja-main-section-left-tag-text'}>COMPRAR!</span></button>
+                        <div className={'item-loja-main-section-right-preco'}>
+                            Faça um<br/>Orçamento</div>
+                        <button className={'item-loja-btn-compra'}><span className={'item-loja-main-section-left-tag-text'}>AQUI</span></button>
                     </div>
                 </div>
             </div>

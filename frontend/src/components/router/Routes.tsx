@@ -3,12 +3,10 @@ import {useState} from 'react';
 import Layout from '../layout/Layout';
 import Loja from '../loja/Loja';
 import Item from '../loja/Item';
-import Blog from '../blog/Blog';
 import Contato from '../contato/Contato';
 import Login from '../login/Login';
 import Admin from '../admin/Admin';
-import Carrinho from '../carrinho/Carrinho';
-import Checkout from '../carrinho/Checkout';
+import Sobre from '../sobre/Sobre';
 
 function tryParse(str: string | null) {
     if(!str)
@@ -23,8 +21,8 @@ const Routes = () => {
 		<Switch>
 			<Route exact path={'/'}
 				render={(props)=><Layout><Loja/></Layout>}/>
-			<Route exact path={'/blog'}
-				render={(props)=><Layout><Blog/></Layout>}/>
+			<Route exact path={'/sobre'}
+				render={(props)=><Layout><Sobre/></Layout>}/>
 			<Route exact path={'/contato'}
 				render={(props)=><Layout><Contato/></Layout>}/>
 			<Route exact path={'/item/:lojaitemId'}
