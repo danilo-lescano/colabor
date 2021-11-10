@@ -8,13 +8,13 @@ const Tag = (value: {categoria: string, subcategoria: string, renderMode: string
         for(let i = 0; i < str.length; i++)
             cont += sizes[a.indexOf(str[i])];
         if(value.renderMode === 'card-mode') {
-            if(cont < 85)
+            if(cont < 77)
                 return '1.2em';
-            else if(cont < 90)
+            else if(cont < 82)
                 return '1.1em';
-            else if(cont < 94)
+            else if(cont < 87)
                 return '1em';
-            else if(cont <= 100)
+            else if(cont <= 92)
                 return '.9em';
             else
                 return '.8em';
@@ -47,10 +47,14 @@ const Tag = (value: {categoria: string, subcategoria: string, renderMode: string
 
     return (
         <>
-            <span className={'item-loja-tag ' + value.renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: value.cor}}>
-                <span className={'item-loja-tag-text ' + value.renderMode} style={{fontSize: calcFontSize(value.categoria)}}>{value.categoria}</span>
-            </span>
-            <span className={'item-loja-tag ' + value.renderMode + ' subcategoria'}><span className={'item-loja-tag-text ' + value.renderMode} style={{fontSize:calcFontSize(value.subcategoria)}}>{value.subcategoria}</span></span>
+            {value.categoria ? 
+                <span className={'item-loja-tag ' + value.renderMode + ' ' + 'sc.cssClass'} style={{backgroundColor: value.cor}}>
+                    <span className={'item-loja-tag-text ' + value.renderMode} style={{fontSize: calcFontSize(value.categoria)}}>{value.categoria}</span>
+                </span>
+            : null}
+            {value.subcategoria ? 
+                <span className={'item-loja-tag ' + value.renderMode + ' subcategoria'}><span className={'item-loja-tag-text ' + value.renderMode} style={{fontSize:calcFontSize(value.subcategoria)}}>{value.subcategoria}</span></span>
+            : null}
         </>
     )
 }

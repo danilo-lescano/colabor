@@ -3,6 +3,7 @@ import Subcategoria from "./Subcatecorias";
 export default interface Item {
     id: string;
     nome: string;
+    subtitulo?: string;
     descricao?: string;
     descricaoTecnica?: string;
     altura?: number;

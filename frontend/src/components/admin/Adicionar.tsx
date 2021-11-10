@@ -176,8 +176,11 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
 
                 {Object.values(categorias).map((c:Categoria)=>{
                     return (<>
-                        {c.nome !== 'oferta' ? <span style={{width:15, height: 15, backgroundColor:c.cor, position: 'relative', display: "inline-block", borderRadius:'100%'}}></span> : null}
-                        <b>{c.nome}</b><br/>
+                        <label key={c.nome+"-checkbox"}><input type={'radio'} name={'categoria-radio'} value={c.nome}
+                        onClick={(e)=>{addCategoria(c.id, '')}} checked={item.subcategoria?.idCategoria === c.id && item.subcategoria?.nome === ''}/>
+                            {c.nome !== 'oferta' ? <span style={{width:15, height: 15, backgroundColor:c.cor, position: 'relative', display: "inline-block", borderRadius:'100%'}}></span> : null}
+                            <b>{c.nome}</b>
+                        </label><br/>
                         {c.subcategorias ? Object.values(c.subcategorias).map((sc:any)=>{
                             return (<>
                                 <Checkbox tag={sc} onClick={(e: any) => addCategoria(c.id, e.target.value)} checked={item.subcategoria?.idCategoria === c.id && item.subcategoria?.nome === sc}/><br/>
@@ -189,6 +192,8 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
                 <input type={'hidden'} value={item.id}/>
+                <label>Subtitulo</label><br/>
+                <input type={'text'} value={item.subtitulo} onChange={(e)=>{item.subtitulo = e.target.value; setItem({...item})}}/><br/><br/>
                 <label>Peso (kg)</label><br/>
                 <input type={'text'} value={item.peso} onChange={(e)=>{item.peso = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
                 <label>Altura (cm)</label><br/>

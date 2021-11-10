@@ -23,7 +23,7 @@ body {
 	max-width: 1080px;
 	margin-left: 50%;
 	transform: translateX(-50%);
-	height: 10rem;
+	height: 7rem;
 	position: relative;
 	font-family: SerifaStd;
 	overflow: hidden;
@@ -250,7 +250,9 @@ body {
 }
 .item-loja-card-img {
 	position: absolute;
-	width: 300px;
+	height: 100%;
+    min-width: 300px;
+    min-height: 300px;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
@@ -553,7 +555,7 @@ h1.texto-vazado {
 .carrousel-inner-box {
 	overflow: hidden;
 	position: relative;
-	height: calc( 9 / 21 * 100vw );
+	height: 32.85714vw;
 	transition: ease 300ms;
 	max-height: 1080px;
 }
@@ -838,13 +840,9 @@ h1.texto-vazado {
 
 
 
-.veja-mais-btn{
+.veja-mais-btn, .header-btn-burguer-wrapper, .mobile-box {
 	display: none;
 }
-.header-btn-burguer-wrapper {
-	display: none;
-}
-
 .clickable {
 	cursor: pointer;
 }
@@ -992,7 +990,8 @@ h1.texto-vazado {
 		height: 180px;
 	}
 	.item-loja-card-img {
-		width: 180px;
+		min-width: 180px;
+		min-height: 180px;
 	}
 	.veja-mais-btn {
 		display: block;
@@ -1043,5 +1042,48 @@ h1.texto-vazado {
 	}
 	.imagem-sobre-apoio:nth-child(2n + 1) {
 		margin-right: 10px;
+	}
+	.item-loja-btn-compra {
+		width: 145px;
+		height: 38px;
+		font-size: 1.6em;
+	}
+	.item-loja-main-section-right-preco {
+		font-size: 2.4em;
+	}
+	.item-loja-main-section-left {
+		font-size: 1.2em;
+	}
+	.item-loja-main-section-left > div:last-child, .item-loja-descricao-box {
+		display: none;
+	}
+	.descricao-mobile-nome {
+		font-family: FuturaExtraBold;
+		font-size: 1.3em;
+		margin: 40px 0 10px 0;
+	}
+	.descricao-mobile {
+		margin: 0 0 40px 0;
+		box-sizing: border-box;
+		text-align: justify;
+	}
+	.mobile-box{
+		display: block;
+		font-family: SerifaStd;
+		padding: 0 15px;
+	}
+	.descricao-mobile-tecnica {
+		margin: 10px 0 30px 65px;
+		width: calc(100% - 130px);
+		font-family: FuturaExtraBold;
+		font-size: 1.3em;
+	}
+	.descricao-mobile-tecnica-texto {
+		margin-left: 65px;
+		margin-bottom: 20px;
+		width: calc(100% - 130px);
+		font-weight: lighter;
+		font-size: 1.2em;
+		font-family: SerifaStd;
 	}
 }

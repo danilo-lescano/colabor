@@ -128,7 +128,7 @@ const ItemPage = () => {
             <div className={'item-loja-main-section-box'}>
                 <div className={'item-loja-main-section-left'}>
                     <div className={'item-loja-main-section-left-title'}>{item.nome}</div>
-                    <div className={'item-loja-main-section-left-subtitle'}>Produto <span>Coletivo Labor</span></div>
+                    <div className={'item-loja-main-section-left-subtitle'}>{item.subtitulo /*Produto <span>Coletivo Labor</span>*/}</div>
                     <div className={'item-loja-main-section-left-tags-minibox'}>
                         {item.subcategoria ? <>
                             <span className={'item-loja-main-section-left-tag no-border'} style={{backgroundColor: getCor(item.subcategoria.idCategoria)}}><span className={'item-loja-main-section-left-tag-text'}>{getNome(item.subcategoria.idCategoria)}</span></span>
@@ -141,22 +141,51 @@ const ItemPage = () => {
                     <div>
                         <div className={'item-loja-main-section-right-preco'}>
                             Faça um<br/>Orçamento</div>
-                        <button className={'item-loja-btn-compra'}><span className={'item-loja-main-section-left-tag-text'}>AQUI</span></button>
+                        <a href={'https://wa.me/5567984247615'} target={'_blank'}>
+                            <button className={'item-loja-btn-compra'}><span className={'item-loja-main-section-left-tag-text'}>AQUI</span></button>
+                        </a>
                     </div>
                 </div>
             </div>
             <div className={'item-loja-mosaico-box'}>
                 <div className={'item-loja-mosaico-box-column one'}>
                     {item.imagensMosaico && item.imagensMosaico[0] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[0]}/> : null}
+                    {item.imagensMosaico && item.imagensMosaico[1] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[1]}/> : null}
                 </div>
                 <div className={'item-loja-mosaico-box-column two'}>
-                    {item.imagensMosaico && item.imagensMosaico[1] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[1]}/> : null}
                     {item.imagensMosaico && item.imagensMosaico[2] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[2]}/> : null}
+                    {item.imagensMosaico && item.imagensMosaico[3] ? <img className={'item-loja-mosaico-box-column-img'} src={item.imagensMosaico[3]}/> : null}
                 </div>
+            </div>
+            <div className={'mobile-box'} style={{marginBottom: 130}}>
+                <div className={'descricao-mobile-nome'}>{item.nome}</div>
+                <div className={'descricao-mobile'}>{item.descricao}</div>
+
+                <div className={'descricao-mobile-tecnica'}>
+                    {item.descricaoTecnica || item.peso || item.altura || item.largura || item.profundidade ? 'Descrição' : null}
+                </div>
+                
+                <div className={'descricao-mobile-tecnica-texto'}>
+                    {item.descricaoTecnica ? <div>{item.descricaoTecnica}</div> : null}
+                    {item.peso ? <div>Peso: {item.peso}</div> : null}
+                    {item.altura ? <div>Altura: {item.altura}</div> : null}
+                    {item.largura ? <div>Largura: {item.largura}</div> : null}
+                    {item.profundidade ? <div>Profundidade: {item.profundidade}</div> : null}
+
+                </div>
+                {item.imagemIcone ? <img src={item.imagemIcone} style={{width: '100%', boxSizing: 'border-box', padding: '0px 80px'}}/> : null}
             </div>
             <div className={'item-loja-descricao-box'}>
                 {item.imagemIcone ? <img src={item.imagemIcone}/> : null}
-                {item.descricaoTecnica ? <div><span>Descrição<br/><br/></span>{item.descricaoTecnica}</div> : null}
+                <div>
+                    {item.descricaoTecnica || item.peso || item.altura || item.largura || item.profundidade ? <span>Descrição<br/><br/></span> : null}
+                    {item.descricaoTecnica ? <div>{item.descricaoTecnica}</div> : null}
+                    {item.peso ? <div>Peso: {item.peso}</div> : null}
+                    {item.altura ? <div>Altura: {item.altura}</div> : null}
+                    {item.largura ? <div>Largura: {item.largura}</div> : null}
+                    {item.profundidade ? <div>Profundidade: {item.profundidade}</div> : null}
+
+                </div>
             </div>
         </> : null
     )
