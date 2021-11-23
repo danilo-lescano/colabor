@@ -16,7 +16,7 @@ export default interface Item {
     imagensCarrossel?: string[];
     imagensMosaico?: string[];
     subcategoria?: Subcategoria;
-    freteGratis?: boolean;
+    ehOferta?: boolean;
     promocaoPorcentagem?: number;
     promocaoFixa?: number;
     fixarNoInicio?: boolean;

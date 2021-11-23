@@ -7,6 +7,7 @@ import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
 import Carrousel from "./Carrousel";
 import Tag from "../shared/Tag";
+import { relative } from "path";
 
 const Loja = () => {
     const [itens, setItens] = useState<Item[]>([]);
@@ -108,9 +109,11 @@ const Loja = () => {
                         <div className={'left-navbar-format-btn'} onClick={()=>setRenderMode('card-mode')}></div>
                         <div className={'left-navbar-format-btn'} onClick={()=>setRenderMode('page-mode')}></div>
                     </div>
-                    <div>
-                        <input type={'text'} placeholder={'Pesquisar'} className={'left-navbar-input'}
+                    <div style={{position: 'relative'}}>
+                        <input type={'text'} placeholder={'Pesquisar'} className={'left-navbar-input'} value={fieldPesquisa}
                             onChange={e=>setFieldPesquisa(e.target.value)}/>
+                        <div className="left-navbar-input-black-bar"></div>
+                        {fieldPesquisa ? <span className={'field-pesquisa-erase-btn clickable'} onClick={()=>setFieldPesquisa('')}>x</span> : null}
                     </div>
                     {categorias.map((c)=>{
                         return <div className={'left-navbar-secao'}>
@@ -147,6 +150,9 @@ const Loja = () => {
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
                                         <Tag categoria={categoriaNome} subcategoria={subcategoriaNome} renderMode={renderMode} cor={cor}/>
                                     </div>
+                                </span>
+                                <span className={'item-loja-span-descricao ' + renderMode}>
+                                    {i.descricao}
                                 </span>
                             </div>
                         ): null;

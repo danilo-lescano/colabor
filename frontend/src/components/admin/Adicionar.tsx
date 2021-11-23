@@ -210,7 +210,7 @@ const Adicionar = function (args: {id?:string, iAddCallback:()=>void}) {
                 <input type={'text'} value={item.promocaoFixa} onChange={(e)=>{item.promocaoFixa = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
                 <label>Quantidade</label><br/>
                 <input type={'text'} value={item.quantidade} onChange={(e)=>{item.quantidade = parseFloat(e.target.value); setItem({...item})}}/><br/><br/>
-                <label><input type='checkbox' checked={item.freteGratis} onClick={()=>{item.freteGratis = !item.freteGratis; setItem({...item})}}/> Frete Grátis</label><br/><br/>
+                <label><input type='checkbox' checked={item.ehOferta} onClick={()=>{item.ehOferta = !item.ehOferta; setItem({...item})}}/> Colocar em Oferta</label><br/><br/>
                 <label><input type='checkbox' checked={item.fixarNoInicio} onClick={()=>{item.fixarNoInicio = !item.fixarNoInicio; setItem({...item})}}/> Fixar no inicio</label><br/><br/>
             </div>
             <div style={{display: 'inline-block', verticalAlign: 'top', marginLeft: '30px'}}>
