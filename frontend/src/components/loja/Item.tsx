@@ -7,6 +7,7 @@ import { GetItem } from "../../api/ItemAPI";
 import Categoria from "../../model/Categoria";
 import Item from "../../model/Item";
 import Session from '../../session/Session'
+import Tag from "../shared/Tag";
 
 const toastConfig = {
     autoClose: 3000,
@@ -109,7 +110,13 @@ const ItemPage = () => {
         for(let i = 0; i < categorias.length; ++i)
             if(categorias[i].id === id)
                 return categorias[i].nome;
-        return ''
+        return '';
+    }
+    const getCategoria = (id: string)=>{
+        for(let i = 0; i < categorias.length; ++i)
+            if(categorias[i].id === id)
+                return categorias[i];
+        return {id: '', nome: '', cor: ''};
     }
 
     const comprar = async () => {
@@ -130,9 +137,12 @@ const ItemPage = () => {
                     <div className={'item-loja-main-section-left-title'}>{item.nome}</div>
                     <div className={'item-loja-main-section-left-subtitle'}>{item.subtitulo /*Produto <span>Coletivo Labor</span>*/}</div>
                     <div className={'item-loja-main-section-left-tags-minibox'}>
-                        {item.subcategoria ? <>
+                        {/*item.subcategoria ? <>
                             <span className={'item-loja-main-section-left-tag no-border'} style={{backgroundColor: getCor(item.subcategoria.idCategoria)}}><span className={'item-loja-main-section-left-tag-text'}>{getNome(item.subcategoria.idCategoria)}</span></span>
                             <span className={'item-loja-main-section-left-tag'}><span className={'item-loja-main-section-left-tag-text'}>{item.subcategoria.nome}</span></span>
+                        </> : null*/}
+                        {item.subcategoria ? <>
+                            <Tag categoria={getCategoria(item.subcategoria.idCategoria)} subcategoria={item.subcategoria.nome} renderMode={''} cor={getCor(item.subcategoria.idCategoria)} onClick={(s: string, ss: string[])=>{}}/>
                         </> : null}
                     </div>
                     <div style={{textAlign: 'justify'}}>{item.descricao}</div>

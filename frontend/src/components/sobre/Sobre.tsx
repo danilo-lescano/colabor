@@ -7,7 +7,7 @@ import parceiro5 from '../../assets/parceiros_logos-05.svg';
 
 const Sobre = function () {
     return (<>
-        <div className={"wrapper"} style={{fontSize: '.8em'}}>
+        <div className={"wrapper"}>
             <h1 className={"texto-vazado"}>SOBRE</h1>
             <div className={'texto-comum'} style={{marginBottom: 30}}>Somos um estúdio de arquitetura, design e fabricação<br/>digital, localizado em Capo Grande-MS</div>
             <div className={'texto-comum'} style={{marginBottom: 30}}>Nossa produção é divida em duas áreas: O desenvolvimento<br/>de produtos e a prestação de serviços.</div>

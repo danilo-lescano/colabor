@@ -46,6 +46,14 @@ const Loja = () => {
                 return categorias[i].nome;
         return ''
     }
+    const getCategoria = (id?: string)=>{
+        if(id) {
+            for(let i = 0; i < categorias.length; ++i)
+                if(categorias[i].id === id)
+                    return categorias[i];
+        }
+        return {id: '', nome: '', cor: ''};
+    }
 
     const addOrRemoveSubCategories = (categoriaNome: string, subcategoriaList: string[]) => {
         const remove = () => {
@@ -131,6 +139,7 @@ const Loja = () => {
                 
                 <div className={'itens-loja-box ' + renderMode}>
                     {itens.map((i)=>{
+                        let categoria = getCategoria(i.subcategoria?.idCategoria);
                         let categoriaNome = i.subcategoria ? getNome(i.subcategoria.idCategoria) : '';
                         let subcategoriaNome = i.subcategoria ? i.subcategoria.nome : '';
                         let cor = i.subcategoria ? getCor(i.subcategoria.idCategoria) : '';
@@ -148,7 +157,7 @@ const Loja = () => {
                                         <span>{i.nome}</span><br/>
                                     </div>
                                     <div className={'item-loja-tags-minibox ' + renderMode}>
-                                        <Tag categoria={categoriaNome} subcategoria={subcategoriaNome} renderMode={renderMode} cor={cor}/>
+                                        <Tag categoria={categoria} subcategoria={subcategoriaNome} renderMode={renderMode} cor={cor} onClick={addOrRemoveSubCategories}/>
                                     </div>
                                 </span>
                                 <span className={'item-loja-span-descricao ' + renderMode}>
